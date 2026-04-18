@@ -1,0 +1,22 @@
+{
+  "name": "yoyangi-frontend",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "check-types": "turbo check-types",
+    "dev": "turbo dev",
+    "dev:admin": "turbo dev --filter=@yoyangi/admin",
+    "dev:web": "turbo dev --filter=@yoyangi/web",
+    "format": "prettier --write \"**/*.{ts,tsx,js,mjs,cjs,json,md,css,html}\""
+  },
+  "devDependencies": {
+    "prettier": "^3.6.0",
+    "turbo": "^2.5.4",
+    "typescript": "^5.8.2"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=18"
+  }
+}
+

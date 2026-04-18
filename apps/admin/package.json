@@ -1,0 +1,24 @@
+{
+  "name": "@yoyangi/admin",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -b && vite build",
+    "check-types": "tsc -b",
+    "dev": "vite",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "19.1.4",
+    "react-dom": "19.1.4"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "^5",
+    "vite": "^7.0.0"
+  }
+}
+
