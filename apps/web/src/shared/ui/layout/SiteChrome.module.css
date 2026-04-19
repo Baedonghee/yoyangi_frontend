@@ -12,7 +12,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  width: min(1200px, calc(100% - 24px));
+  width: min(1080px, calc(100% - 32px));
   min-height: 76px;
   margin: 0 auto;
 }
@@ -167,7 +167,7 @@
 }
 
 .footerInner {
-  width: min(1200px, calc(100% - 24px));
+  width: min(1080px, calc(100% - 32px));
   margin: 0 auto;
   padding: 48px 0 36px;
 }
@@ -338,4 +338,3 @@
     padding: 0 10px;
   }
 }
-

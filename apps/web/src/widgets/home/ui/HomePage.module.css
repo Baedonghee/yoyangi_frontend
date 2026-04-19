@@ -3,20 +3,21 @@
   overflow-x: hidden;
 }
 
+.heroBlock {
+  width: 100%;
+  margin: 0;
+}
+
 .main {
   display: grid;
   gap: 48px;
-  width: min(1200px, calc(100% - 24px));
+  width: min(1080px, calc(100% - 32px));
   margin: 0 auto;
   padding: 0 0 24px;
 }
 
-.heroBlock {
-  margin-top: 0;
-}
-
 .quickSearch {
-  margin-top: -26px;
+  margin-top: -38px;
   position: relative;
   z-index: 5;
 }
@@ -25,14 +26,14 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  width: min(720px, calc(100% - 32px));
-  min-height: 68px;
-  margin: 0 auto;
-  padding: 10px 12px 10px 20px;
+  width: min(980px, calc(100% - 32px));
+  min-height: 78px;
+  margin: 0 auto 10px;
+  padding: 12px 14px 12px 24px;
   border: 1px solid #e5e7eb;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.96);
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+  box-shadow: 0 20px 44px rgba(15, 23, 42, 0.14);
 }
 
 .quickSearchCard input {
@@ -52,9 +53,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 118px;
-  min-height: 46px;
-  padding: 0 16px;
+  min-width: 124px;
+  min-height: 52px;
+  padding: 0 18px;
   border: 0;
   border-radius: 999px;
   background: linear-gradient(135deg, #ff8d3a 0%, #ff6a1e 100%);
@@ -153,9 +154,10 @@
 }
 
 .divider {
-  height: 12px;
-  margin: -4px 0;
-  background: #f8fafc;
+  height: 1px;
+  width: calc(100% - 24px);
+  margin: 4px auto 0;
+  background: rgba(226, 232, 240, 0.72);
 }
 
 .sectionSpacing {
@@ -170,13 +172,19 @@
 }
 
 @media (max-width: 720px) {
+  .heroBlock {
+    width: 100%;
+    margin-top: 0;
+  }
+
   .main {
     width: min(100%, calc(100% - 16px));
     gap: 40px;
   }
 
   .quickSearchCard {
-    width: min(100%, calc(100% - 24px));
+    width: min(100%, calc(100% - 16px));
+    min-height: 68px;
     flex-wrap: wrap;
     border-radius: 24px;
   }
@@ -209,4 +217,3 @@
     display: none;
   }
 }
-

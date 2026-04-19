@@ -1,7 +1,9 @@
 .carousel {
   position: relative;
   overflow: hidden;
-  border-radius: 0 0 28px 28px;
+  border-radius: 0;
+  background: #f8fafc;
+  box-shadow: none;
 }
 
 .track {
@@ -12,13 +14,15 @@
 .slide {
   position: relative;
   flex: 0 0 100%;
-  min-height: 260px;
+  aspect-ratio: 1920 / 557;
+  background: #e5e7eb;
 }
 
 .image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center center;
 }
 
 .overlay {
@@ -26,30 +30,32 @@
   inset: 0;
   display: flex;
   align-items: center;
-  background: linear-gradient(90deg, rgba(15, 23, 42, 0.72) 0%, rgba(15, 23, 42, 0.2) 56%, rgba(15, 23, 42, 0) 100%);
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.18) 18%, rgba(15, 23, 42, 0.32) 40%, rgba(15, 23, 42, 0.1) 62%, rgba(255, 255, 255, 0.72) 100%);
 }
 
 .content {
-  width: min(1200px, calc(100% - 24px));
+  width: min(1100px, calc(100% - 72px));
   margin: 0 auto;
   color: #fff;
+  padding-inline: 24px;
 }
 
 .content h1,
 .content h2 {
-  max-width: 10.5ch;
+  max-width: 9.5ch;
   margin: 0 0 16px;
-  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(2rem, 4.4vw, 3.2rem);
   font-weight: 900;
   letter-spacing: -0.05em;
   line-height: 1.05;
 }
 
 .content p {
-  max-width: 48ch;
+  max-width: 38ch;
   margin: 0 0 20px;
   color: rgba(255, 255, 255, 0.9);
-  font-size: clamp(0.94rem, 2vw, 1.1rem);
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
   font-weight: 500;
 }
 
@@ -68,11 +74,12 @@
 
 .dots {
   position: absolute;
-  right: 18px;
-  bottom: 16px;
+  left: 50%;
+  bottom: 18px;
   z-index: 2;
   display: inline-flex;
   gap: 8px;
+  transform: translateX(-50%);
 }
 
 .dot {
@@ -88,24 +95,31 @@
   background: #fff;
 }
 
-@media (min-width: 640px) {
-  .carousel {
-    border-radius: 28px;
-  }
-
-  .slide {
-    min-height: 420px;
-  }
-}
-
 @media (max-width: 720px) {
   .content {
     width: min(100%, calc(100% - 20px));
+    padding-inline: 0;
   }
 
   .content h1,
   .content h2 {
     margin-bottom: 12px;
   }
-}
 
+  .carousel {
+    border-radius: 0 0 28px 28px;
+  }
+
+  .overlay {
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.24) 0%, rgba(15, 23, 42, 0.54) 100%);
+  }
+
+  .slide {
+    aspect-ratio: 16 / 10;
+    min-height: 340px;
+  }
+
+  .dots {
+    bottom: 14px;
+  }
+}
