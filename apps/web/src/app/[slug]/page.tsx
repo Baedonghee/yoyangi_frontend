@@ -9,13 +9,45 @@ const routeMap = {
     title: "회원가입",
     description: "회원가입 흐름이 들어갈 자리입니다."
   },
+  search: {
+    title: "검색 결과",
+    description: "검색 결과 화면이 들어갈 자리입니다."
+  },
   login: {
     title: "로그인",
     description: "로그인 화면이 들어갈 자리입니다."
   },
+  guide: {
+    title: "요양 가이드",
+    description: "요양 가이드 목록이 들어갈 자리입니다."
+  },
+  notice: {
+    title: "공지사항",
+    description: "공지사항 목록이 들어갈 자리입니다."
+  },
+  privacy: {
+    title: "개인정보처리방침",
+    description: "개인정보처리방침 페이지가 들어갈 자리입니다."
+  },
+  terms: {
+    title: "이용약관",
+    description: "이용약관 페이지가 들어갈 자리입니다."
+  },
+  discover: {
+    title: "둘러보기",
+    description: "시설 탐색 화면이 들어갈 자리입니다."
+  },
+  profile: {
+    title: "프로필",
+    description: "프로필 관리 화면이 들어갈 자리입니다."
+  },
   partner: {
     title: "입점문의",
     description: "시설 입점 및 제휴 문의 페이지가 들어갈 자리입니다."
+  },
+  recommended: {
+    title: "요양이 추천시설",
+    description: "추천시설 전체 목록으로 확장될 페이지입니다."
   },
   facilities: {
     title: "추천시설",

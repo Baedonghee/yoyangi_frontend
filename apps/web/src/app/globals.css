@@ -1,11 +1,6 @@
 :root {
   color-scheme: light;
-  font-family:
-    "SUIT Variable",
-    "Pretendard Variable",
-    "Apple SD Gothic Neo",
-    "Malgun Gothic",
-    sans-serif;
+  font-family: "Pretendard Variable", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   line-height: 1.5;
   text-rendering: optimizeLegibility;
 }
@@ -21,10 +16,8 @@ body {
 }
 
 body {
-  background:
-    radial-gradient(circle at top, rgba(254, 226, 190, 0.6), transparent 22%),
-    linear-gradient(180deg, #f7f3ea 0%, #fbfaf7 48%, #f3efe8 100%);
-  color: #132238;
+  background: #ffffff;
+  color: #111827;
   overflow-x: hidden;
 }
 
@@ -49,5 +42,5 @@ svg {
 }
 
 ::selection {
-  background: rgba(22, 58, 112, 0.18);
+  background: rgba(249, 115, 22, 0.18);
 }
