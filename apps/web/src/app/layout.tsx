@@ -1,22 +1,18 @@
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
 
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Yoyangi Web",
-  description: "Yoyangi public web application"
+  title: "요양이",
+  description: "추천 시설, 요양이 TV, 지역별 정보를 한 번에 보는 요양이 메인"
 };
 
-type RootLayoutProps = {
-  children: ReactNode;
-};
-
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function RootLayout({
+  children
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ko">
       <body>{children}</body>
     </html>
   );
 }
-
