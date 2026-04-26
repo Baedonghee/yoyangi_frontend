@@ -5,16 +5,16 @@ import type {
 } from "@/entities/home/model/types";
 
 export const homeCategories: HomeCategory[] = [
-  { id: "nursing-home", label: "요양원", href: "/search", icon: "building", tone: "orange" },
-  { id: "day-care", label: "주야간보호", href: "/search", icon: "home", tone: "green" },
-  { id: "home-care", label: "방문요양", href: "/search", icon: "user-plus", tone: "blue" },
-  { id: "hospital", label: "요양병원", href: "/search", icon: "bed", tone: "purple" },
-  { id: "home-nursing", label: "방문간호", href: "/search", icon: "stethoscope", tone: "teal" },
-  { id: "home-bath", label: "방문목욕", href: "/search", icon: "heart", tone: "pink" },
-  { id: "welfare", label: "복지용구", href: "/search", icon: "map-pin", tone: "yellow" },
-  { id: "short-stay", label: "단기보호", href: "/search", icon: "calendar", tone: "indigo" },
-  { id: "dementia", label: "치매전담", href: "/search", icon: "shield", tone: "rose" },
-  { id: "all", label: "전체보기", href: "/search", icon: "plus", tone: "gray" }
+  { id: "religion", label: "종교시설", href: "/cares?themes=RE", icon: "RE", tone: "orange" },
+  { id: "premium", label: "프리미엄", href: "/cares?themes=PR", icon: "PR", tone: "green" },
+  { id: "economy", label: "경제적인", href: "/cares?themes=EC", icon: "EC", tone: "blue" },
+  { id: "nursing", label: "간호특화", href: "/cares?themes=NU", icon: "NU", tone: "purple" },
+  { id: "cooking", label: "직영조리", href: "/cares?themes=CK", icon: "CK", tone: "teal" },
+  { id: "rehabilitation", label: "재활치료", href: "/cares?themes=RH", icon: "RH", tone: "pink" },
+  { id: "manpower", label: "인력가산", href: "/cares?themes=LA", icon: "LA", tone: "yellow" },
+  { id: "program", label: "프로그램", href: "/cares?themes=PG", icon: "PG", tone: "indigo" },
+  { id: "downtown", label: "도심인접", href: "/cares?themes=DT", icon: "DT", tone: "rose" },
+  { id: "walk", label: "산책/텃밭", href: "/cares?themes=WK", icon: "WK", tone: "gray" }
 ];
 
 export const mockHomePageData: HomePageData = {

@@ -4,6 +4,7 @@ import { startTransition, useEffect, useState } from "react";
 
 import type { HeroBanner } from "@/entities/home/model/types";
 import styles from "@/features/home/ui/BannerCarousel.module.css";
+import { SystemIcon } from "@/shared/ui/icons/SystemIcon";
 
 type BannerCarouselProps = {
   items: HeroBanner[];
@@ -11,6 +12,24 @@ type BannerCarouselProps = {
 
 export function BannerCarousel({ items }: BannerCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  function move(direction: -1 | 1) {
+    startTransition(() => {
+      setCurrentIndex((previous) => {
+        const nextIndex = previous + direction;
+
+        if (nextIndex < 0) {
+          return items.length - 1;
+        }
+
+        if (nextIndex >= items.length) {
+          return 0;
+        }
+
+        return nextIndex;
+      });
+    });
+  }
 
   useEffect(() => {
     const timerId = window.setInterval(() => {
@@ -45,22 +64,26 @@ export function BannerCarousel({ items }: BannerCarouselProps) {
         })}
       </div>
 
-      <div className={styles.dots}>
-        {items.map((item, index) => (
+      {items.length > 1 ? (
+        <>
           <button
-            key={item.id}
             type="button"
-            aria-label={`${index + 1}번 배너 보기`}
-            aria-pressed={currentIndex === index}
-            className={`${styles.dot} ${currentIndex === index ? styles.dotActive : ""}`}
-            onClick={() => {
-              startTransition(() => {
-                setCurrentIndex(index);
-              });
-            }}
-          />
-        ))}
-      </div>
+            className={`${styles.arrow} ${styles.leftArrow}`}
+            aria-label="이전 배너"
+            onClick={() => move(-1)}
+          >
+            <SystemIcon name="arrow-left" />
+          </button>
+          <button
+            type="button"
+            className={`${styles.arrow} ${styles.rightArrow}`}
+            aria-label="다음 배너"
+            onClick={() => move(1)}
+          >
+            <SystemIcon name="arrow-right" />
+          </button>
+        </>
+      ) : null}
     </div>
   );
 }

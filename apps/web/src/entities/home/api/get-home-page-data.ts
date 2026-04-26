@@ -138,6 +138,10 @@ function extractYoutubeId(url: string) {
   return match?.[1] ?? "";
 }
 
+function toYoutubeEmbedUrl(youtubeId: string) {
+  return `https://www.youtube.com/embed/${youtubeId}`;
+}
+
 function mapRegions(list: RegionApiItem[]): RegionItem[] {
   const sorted = regionOrder
     .map((name) => list.find((region) => region.name === name))
@@ -187,7 +191,7 @@ export async function getHomePageData(): Promise<HomePageData> {
   const heroBanners = banners.length ? mapBanners(banners) : mockHomePageData.heroBanners;
   const tvItems = youtubes.length
     ? youtubes
-        .map((item) => {
+        .map<HomePageData["tvItems"][number] | null>((item) => {
           const youtubeId = extractYoutubeId(item.url);
 
           if (!youtubeId) {
@@ -199,7 +203,8 @@ export async function getHomePageData(): Promise<HomePageData> {
             title: item.title,
             views: "요양이 TV",
             imageUrl: `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`,
-            href: `https://www.youtube.com/watch?v=${youtubeId}`
+            href: `https://www.youtube.com/watch?v=${youtubeId}`,
+            embedUrl: toYoutubeEmbedUrl(youtubeId)
           };
         })
         .filter((item): item is HomePageData["tvItems"][number] => Boolean(item))

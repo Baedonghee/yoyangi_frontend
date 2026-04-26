@@ -83,6 +83,79 @@ export function SystemIcon({ name, className }: IconProps) {
           <path {...commonProps} d="m9.5 12 1.6 1.8L14.8 10" />
         </svg>
       );
+    case "RE":
+      return (
+        <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+          <path {...commonProps} d="M5 20V9.5L12 5l7 4.5V20" />
+          <path {...commonProps} d="M9 20v-6h6v6M12 3v5M9.7 5.4h4.6" />
+        </svg>
+      );
+    case "PR":
+      return (
+        <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+          <path {...commonProps} d="M5 9h14l-2 11H7L5 9Z" />
+          <path {...commonProps} d="m7 9 2.2-4 2.8 4 2.8-4L17 9M9 14h6" />
+        </svg>
+      );
+    case "EC":
+      return (
+        <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+          <circle {...commonProps} cx="12" cy="12" r="8" />
+          <path {...commonProps} d="M8.5 9.2h7M8.5 12h6M11 8v8M13.8 8v8" />
+        </svg>
+      );
+    case "NU":
+      return (
+        <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+          <path {...commonProps} d="M7 4v5a5 5 0 0 0 10 0V4" />
+          <path {...commonProps} d="M12 14v5M9.5 16.5h5" />
+          <circle {...commonProps} cx="18" cy="18" r="2" />
+        </svg>
+      );
+    case "CK":
+      return (
+        <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+          <path {...commonProps} d="M7 4v7M10 4v7M7 8h3M8.5 11v9" />
+          <path {...commonProps} d="M16 4v16M16 4c2 1.2 3 3 3 5.5S18 14 16 15" />
+        </svg>
+      );
+    case "RH":
+      return (
+        <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+          <path {...commonProps} d="M5 15h3l2.4-6 3.2 9 2.4-6h3" />
+          <path {...commonProps} d="M6 20h12M8 5h8" />
+        </svg>
+      );
+    case "LA":
+      return (
+        <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+          <circle {...commonProps} cx="9" cy="8" r="3" />
+          <path {...commonProps} d="M3.8 19c1-3 3-4.5 5.2-4.5S13.2 16 14.2 19" />
+          <path {...commonProps} d="M16 8h4M18 6v4M15.5 15.5c1.6.4 2.8 1.5 3.5 3.5" />
+        </svg>
+      );
+    case "PG":
+      return (
+        <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+          <path {...commonProps} d="M6 4v4M18 4v4M4 9h16M5 6h14a1 1 0 0 1 1 1v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a1 1 0 0 1 1-1Z" />
+          <path {...commonProps} d="m8.5 14 2 2 4.5-4" />
+        </svg>
+      );
+    case "DT":
+      return (
+        <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+          <path {...commonProps} d="M4 20V8l6-3v15M12 20V6h8v14" />
+          <path {...commonProps} d="M7 10h1M7 14h1M15 9h2M15 13h2M15 17h2" />
+        </svg>
+      );
+    case "WK":
+      return (
+        <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+          <path {...commonProps} d="M5 19c4.5-1.8 8-5.2 10-10" />
+          <path {...commonProps} d="M9 15C6.5 12.5 6.5 8.8 9 6c3 1 4.8 3.4 4.8 6" />
+          <path {...commonProps} d="M15 9c2.5-.4 4.2.4 5 2.5-1.8 2.2-4.4 2.8-6.6 1.5" />
+        </svg>
+      );
     case "search":
       return (
         <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
@@ -137,4 +210,3 @@ export function SystemIcon({ name, className }: IconProps) {
       return null;
   }
 }
-

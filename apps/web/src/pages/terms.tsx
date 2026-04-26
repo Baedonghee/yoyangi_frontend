@@ -1,7 +1,12 @@
-import { placeholderConfigs } from "@/shared/placeholder/config";
-import { PlaceholderPage } from "@/shared/placeholder/PlaceholderPage";
+import type { GetServerSideProps } from "next";
+
+export const getServerSideProps: GetServerSideProps = async () => ({
+  redirect: {
+    destination: "/term/service",
+    permanent: true
+  }
+});
 
 export default function TermsPage() {
-  return <PlaceholderPage config={placeholderConfigs.terms} />;
+  return null;
 }
-

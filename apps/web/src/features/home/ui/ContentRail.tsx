@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { SystemIcon } from "@/shared/ui/icons/SystemIcon";
 import styles from "@/features/home/ui/ContentRail.module.css";
@@ -13,6 +13,7 @@ export type RailCard = {
   href: string;
   title: string;
   imageUrl: string;
+  embedUrl?: string;
   subtitle?: string;
   badge?: string;
   rating?: number;
@@ -27,6 +28,14 @@ type ContentRailProps = {
   variant: RailVariant;
 };
 
+const SCROLL_EDGE_THRESHOLD = 8;
+
+function getYoutubeEmbedUrl(url: string) {
+  const match = url.match(/(?:embed\/|v=|youtu\.be\/)([^?&/]+)/);
+
+  return match?.[1] ? `https://www.youtube.com/embed/${match[1]}` : "";
+}
+
 export function ContentRail({
   title,
   href,
@@ -34,6 +43,55 @@ export function ContentRail({
   variant
 }: ContentRailProps) {
   const railRef = useRef<HTMLDivElement>(null);
+  const scrollFrameRef = useRef<number | null>(null);
+  const [scrollButtons, setScrollButtons] = useState({
+    left: false,
+    right: false
+  });
+
+  function updateScrollButtons() {
+    const rail = railRef.current;
+
+    if (!rail) {
+      return;
+    }
+
+    const firstItem = rail.firstElementChild;
+    const lastItem = rail.lastElementChild;
+    const maxScrollLeft = Math.max(0, rail.scrollWidth - rail.clientWidth);
+    const hasOverflow = maxScrollLeft > SCROLL_EDGE_THRESHOLD;
+    const railRect = rail.getBoundingClientRect();
+    const firstItemRect = firstItem?.getBoundingClientRect();
+    const lastItemRect = lastItem?.getBoundingClientRect();
+    const hasHiddenLeftItem = firstItemRect
+      ? firstItemRect.left < railRect.left - SCROLL_EDGE_THRESHOLD
+      : false;
+    const hasHiddenRightItem = lastItemRect
+      ? lastItemRect.right > railRect.right + SCROLL_EDGE_THRESHOLD
+      : false;
+    const nextState = {
+      left: hasOverflow && hasHiddenLeftItem,
+      right: hasOverflow && hasHiddenRightItem
+    };
+
+    setScrollButtons((currentState) =>
+      currentState.left === nextState.left &&
+      currentState.right === nextState.right
+        ? currentState
+        : nextState
+    );
+  }
+
+  function handleRailScroll() {
+    if (scrollFrameRef.current !== null) {
+      return;
+    }
+
+    scrollFrameRef.current = window.requestAnimationFrame(() => {
+      scrollFrameRef.current = null;
+      updateScrollButtons();
+    });
+  }
 
   function move(direction: -1 | 1) {
     const rail = railRef.current;
@@ -48,6 +106,38 @@ export function ContentRail({
     });
   }
 
+  useEffect(() => {
+    const rail = railRef.current;
+
+    updateScrollButtons();
+
+    if (!rail) {
+      return undefined;
+    }
+
+    if (typeof ResizeObserver === "undefined") {
+      window.addEventListener("resize", updateScrollButtons);
+
+      return () => {
+        window.removeEventListener("resize", updateScrollButtons);
+        if (scrollFrameRef.current !== null) {
+          window.cancelAnimationFrame(scrollFrameRef.current);
+        }
+      };
+    }
+
+    const resizeObserver = new ResizeObserver(updateScrollButtons);
+    resizeObserver.observe(rail);
+    Array.from(rail.children).forEach((child) => resizeObserver.observe(child));
+
+    return () => {
+      resizeObserver.disconnect();
+      if (scrollFrameRef.current !== null) {
+        window.cancelAnimationFrame(scrollFrameRef.current);
+      }
+    };
+  }, [items.length, variant]);
+
   return (
     <section className={styles.section}>
       <div className={styles.header}>
@@ -59,15 +149,27 @@ export function ContentRail({
       </div>
 
       <div className={styles.railWrap}>
-        <button
-          type="button"
-          className={`${styles.arrow} ${styles.leftArrow}`}
-          aria-label={`${title} 이전`}
-          onClick={() => move(-1)}
+        {scrollButtons.left ? (
+          <button
+            type="button"
+            className={`${styles.arrow} ${styles.leftArrow}`}
+            aria-label={`${title} 이전`}
+            onClick={() => move(-1)}
+          >
+            <SystemIcon name="arrow-left" />
+          </button>
+        ) : null}
+        <div
+          ref={railRef}
+          onScroll={handleRailScroll}
+          className={`${styles.rail} ${
+            variant === "region"
+              ? styles.regionRail
+              : variant === "video"
+                ? styles.videoRail
+                : ""
+          }`}
         >
-          <SystemIcon name="arrow-left" />
-        </button>
-        <div ref={railRef} className={styles.rail}>
           {items.map((item) => {
             if (variant === "recommended") {
               return (
@@ -87,17 +189,9 @@ export function ContentRail({
                     <h3>{item.title}</h3>
                     <p className={styles.location}>
                       <SystemIcon name="map-pin" />
-                      {item.subtitle}
+                      <span>{item.subtitle}</span>
                     </p>
                     <div className={styles.recommendedFooter}>
-                      {typeof item.rating === "number" ? (
-                        <span className={styles.rating}>
-                          <SystemIcon name="star" />
-                          {item.rating.toFixed(1)}
-                        </span>
-                      ) : (
-                        <span />
-                      )}
                       <span className={styles.consultationLabel}>
                         {item.consultationLabel}
                       </span>
@@ -108,23 +202,41 @@ export function ContentRail({
             }
 
             if (variant === "video") {
+              const embedUrl = item.embedUrl || getYoutubeEmbedUrl(item.href);
+              const isExternalLink = /^https?:\/\//.test(item.href);
+
               return (
-                <Link
+                <article
                   key={item.id}
-                  href={item.href}
                   className={`${styles.card} ${styles.videoCard}`}
                 >
                   <div className={styles.media}>
-                    <img src={item.imageUrl} alt={item.title} className={styles.image} />
-                    <span className={styles.playButton}>
-                      <SystemIcon name="play" />
-                    </span>
+                    {embedUrl ? (
+                      <iframe
+                        className={styles.videoFrame}
+                        src={embedUrl}
+                        title={item.title}
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                      />
+                    ) : (
+                      <img src={item.imageUrl} alt={item.title} className={styles.image} />
+                    )}
                   </div>
                   <div className={styles.videoBody}>
-                    <h3>{item.title}</h3>
+                    <h3>
+                      <a
+                        href={item.href}
+                        target={isExternalLink ? "_blank" : undefined}
+                        rel={isExternalLink ? "noreferrer" : undefined}
+                      >
+                        {item.title}
+                      </a>
+                    </h3>
                     <p className={styles.videoMeta}>{item.meta}</p>
                   </div>
-                </Link>
+                </article>
               );
             }
 
@@ -138,24 +250,23 @@ export function ContentRail({
                   <img src={item.imageUrl} alt={item.title} className={styles.image} />
                   <div className={styles.regionOverlay}>
                     <h3>{item.title}</h3>
-                    <span className={styles.regionCta}>
-                      {item.subtitle}
-                      <SystemIcon name="arrow-right" />
-                    </span>
+                    <p className={styles.regionSummary}>{item.subtitle}</p>
                   </div>
                 </div>
               </Link>
             );
           })}
         </div>
-        <button
-          type="button"
-          className={`${styles.arrow} ${styles.rightArrow}`}
-          aria-label={`${title} 다음`}
-          onClick={() => move(1)}
-        >
-          <SystemIcon name="arrow-right" />
-        </button>
+        {scrollButtons.right ? (
+          <button
+            type="button"
+            className={`${styles.arrow} ${styles.rightArrow}`}
+            aria-label={`${title} 다음`}
+            onClick={() => move(1)}
+          >
+            <SystemIcon name="arrow-right" />
+          </button>
+        ) : null}
       </div>
     </section>
   );

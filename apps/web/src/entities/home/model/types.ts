@@ -16,7 +16,17 @@ export type HomeIconName =
   | "star"
   | "chat"
   | "youtube"
-  | "blog";
+  | "blog"
+  | "RE"
+  | "PR"
+  | "EC"
+  | "NU"
+  | "CK"
+  | "RH"
+  | "LA"
+  | "PG"
+  | "DT"
+  | "WK";
 
 export type ToneName =
   | "orange"
@@ -53,6 +63,7 @@ export type VideoItem = {
   views: string;
   imageUrl: string;
   href: string;
+  embedUrl?: string;
 };
 
 export type RegionItem = {

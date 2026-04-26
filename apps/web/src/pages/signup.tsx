@@ -1,7 +1,5 @@
-import { placeholderConfigs } from "@/shared/placeholder/config";
-import { PlaceholderPage } from "@/shared/placeholder/PlaceholderPage";
+import { AuthPage } from "@/widgets/auth/ui/AuthPage";
 
 export default function SignupPage() {
-  return <PlaceholderPage config={placeholderConfigs.signup} />;
+  return <AuthPage mode="signup" />;
 }
-

@@ -9,7 +9,7 @@ import { SiteHeader } from "@/shared/ui/layout/SiteHeader";
 
 type NextPageWithLayout<P = Record<string, never>> = NextPage<P> & {
   noChrome?: boolean;
-  getLayout?: (page: ReactElement) => ReactNode;
+  getLayout?: (page: ReactElement) => ReactElement;
 };
 
 type AppPropsWithLayout = AppProps & {
@@ -30,7 +30,7 @@ function DefaultChrome({ children }: { children: ReactNode }) {
 export default function App({
   Component,
   pageProps
-}: AppPropsWithLayout) {
+}: AppPropsWithLayout): ReactElement {
   const page = <Component {...pageProps} />;
 
   if (Component.getLayout) {
@@ -43,4 +43,3 @@ export default function App({
 
   return <DefaultChrome>{page}</DefaultChrome>;
 }
-

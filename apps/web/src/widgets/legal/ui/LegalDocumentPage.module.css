@@ -1,0 +1,144 @@
+.page {
+  min-height: 100vh;
+  background:
+    linear-gradient(180deg, #f8fafc 0%, #fff 280px),
+    #fff;
+}
+
+.container {
+  width: min(880px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 34px 0 72px;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 34px;
+  color: #64748b;
+  font-size: 0.94rem;
+  font-weight: 800;
+  transition: color 180ms ease;
+}
+
+.backLink:hover {
+  color: #111827;
+}
+
+.backLink svg {
+  width: 20px;
+  height: 20px;
+}
+
+.hero {
+  padding-bottom: 26px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.eyebrow {
+  display: inline-flex;
+  margin-bottom: 14px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--color-primary-softer);
+  color: var(--color-primary);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.hero h1 {
+  margin: 0 0 12px;
+  color: #111827;
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+
+.effectiveDate {
+  margin: 0;
+  color: #64748b;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.content {
+  display: grid;
+  gap: 34px;
+  padding-top: 36px;
+}
+
+.section {
+  display: grid;
+  gap: 14px;
+}
+
+.section h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 1.34rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+.section h3 {
+  margin: 4px 0 0;
+  color: #1f2937;
+  font-size: 1.04rem;
+  font-weight: 900;
+}
+
+.section p,
+.section li {
+  color: #374151;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.82;
+}
+
+.section p {
+  margin: 0;
+}
+
+.section ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 22px;
+}
+
+.noticeBox {
+  margin-top: 4px;
+  padding: 18px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: #f8fafc;
+}
+
+.noticeBox p {
+  margin: 0;
+}
+
+@media (max-width: 720px) {
+  .container {
+    width: min(100%, calc(100% - 24px));
+    padding-top: 24px;
+  }
+
+  .backLink {
+    margin-bottom: 26px;
+  }
+
+  .content {
+    gap: 30px;
+  }
+
+  .section h2 {
+    font-size: 1.18rem;
+  }
+
+  .section p,
+  .section li {
+    font-size: 0.95rem;
+  }
+}

@@ -8,6 +8,7 @@ import {
 import { RecommendedFacilitiesSection } from "@/features/home/ui/RecommendedFacilitiesSection";
 import { BannerCarousel } from "@/features/home/ui/BannerCarousel";
 import { SystemIcon } from "@/shared/ui/icons/SystemIcon";
+import { ThemeCategoryIcon } from "@/shared/ui/icons/theme/ThemeCategoryIcon";
 import styles from "@/widgets/home/ui/HomePage.module.css";
 
 type HomePageViewProps = {
@@ -20,6 +21,7 @@ export function HomePageView({ data }: HomePageViewProps) {
     href: item.href,
     title: item.title,
     imageUrl: item.imageUrl,
+    embedUrl: item.embedUrl,
     meta: item.views
   }));
 
@@ -39,6 +41,7 @@ export function HomePageView({ data }: HomePageViewProps) {
 
       <div className={styles.quickSearch}>
         <form action="/search" method="get" className={styles.quickSearchCard}>
+          <span className={styles.quickSearchLabel}>시설 검색</span>
           <SystemIcon name="search" className={styles.quickSearchIcon} />
           <input
             type="search"
@@ -62,7 +65,7 @@ export function HomePageView({ data }: HomePageViewProps) {
                     styles[`tone-${category.tone}` as keyof typeof styles]
                   }`}
                 >
-                  <SystemIcon name={category.icon} />
+                  <ThemeCategoryIcon name={category.icon} />
                 </span>
                 <span className={styles.categoryLabel}>{category.label}</span>
               </Link>
@@ -91,4 +94,3 @@ export function HomePageView({ data }: HomePageViewProps) {
     </div>
   );
 }
-
