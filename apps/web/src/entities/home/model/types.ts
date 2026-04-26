@@ -45,6 +45,7 @@ export type HeroBanner = {
   title: string;
   description: string;
   imageUrl: string;
+  mobileImageUrl?: string;
   href: string;
   ctaLabel: string;
 };

@@ -73,6 +73,33 @@ export function HomePageView({ data }: HomePageViewProps) {
           </div>
         </section>
 
+        <Link href="/partner" className={styles.partnerPromo}>
+          <span className={styles.partnerPromoText}>
+            <strong>시설 운영자이신가요?</strong>
+            <span>요양이에 입점하고 상담 연결을 받아보세요</span>
+          </span>
+          <span className={styles.partnerPromoButton}>입점 신청</span>
+        </Link>
+
+        <a
+          href="tel:1577-5776"
+          className={styles.consultPromo}
+          aria-label="요양이 상담 전화 연결"
+        >
+          <img
+            src="/image/banner/youtube-pc.png"
+            alt="요양이 상담 배너"
+            className={styles.consultPromoDesktop}
+            loading="lazy"
+          />
+          <img
+            src="/image/banner/youtube-mobile.png"
+            alt="요양이 상담 배너"
+            className={styles.consultPromoMobile}
+            loading="lazy"
+          />
+        </a>
+
         <div className={styles.divider} />
 
         <div className={styles.sectionSpacing}>

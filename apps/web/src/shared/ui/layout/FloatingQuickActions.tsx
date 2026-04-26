@@ -3,21 +3,25 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { quickActions } from "@/shared/config/site";
+import { quickActions, siteConfig } from "@/shared/config/site";
 import { SystemIcon } from "@/shared/ui/icons/SystemIcon";
 import styles from "@/shared/ui/layout/SiteChrome.module.css";
 
 export function FloatingQuickActions() {
   const [isConsultModalOpen, setIsConsultModalOpen] = useState(false);
+  const [isMobileSheetOpen, setIsMobileSheetOpen] = useState(false);
+  const youtubeAction = quickActions.find((action) => action.icon === "youtube");
+  const blogAction = quickActions.find((action) => action.icon === "blog");
 
   useEffect(() => {
-    if (!isConsultModalOpen) {
+    if (!isConsultModalOpen && !isMobileSheetOpen) {
       return;
     }
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
         setIsConsultModalOpen(false);
+        setIsMobileSheetOpen(false);
       }
     }
 
@@ -26,7 +30,7 @@ export function FloatingQuickActions() {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isConsultModalOpen]);
+  }, [isConsultModalOpen, isMobileSheetOpen]);
 
   return (
     <>
@@ -65,6 +69,19 @@ export function FloatingQuickActions() {
         })}
       </aside>
 
+      <div className={styles.mobileQuickDock}>
+        <button
+          type="button"
+          className={styles.mobileQuickButton}
+          onClick={() => setIsMobileSheetOpen(true)}
+          aria-haspopup="dialog"
+          aria-expanded={isMobileSheetOpen}
+        >
+          <SystemIcon name="chat" className={styles.mobileQuickIcon} />
+          <span>상담하기</span>
+        </button>
+      </div>
+
       {isConsultModalOpen ? (
         <div
           className={styles.consultOverlay}
@@ -93,6 +110,84 @@ export function FloatingQuickActions() {
             >
               확인
             </button>
+          </section>
+        </div>
+      ) : null}
+
+      {isMobileSheetOpen ? (
+        <div
+          className={styles.quickSheetOverlay}
+          role="presentation"
+          onClick={() => setIsMobileSheetOpen(false)}
+        >
+          <section
+            className={styles.quickSheet}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="quick-sheet-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <span className={styles.quickSheetHandle} aria-hidden="true" />
+            <div className={styles.quickSheetHeader}>
+              <div>
+                <strong id="quick-sheet-title">무엇을 도와드릴까요?</strong>
+                <p>필요한 채널로 바로 연결해드릴게요.</p>
+              </div>
+              <button
+                type="button"
+                className={styles.quickSheetClose}
+                onClick={() => setIsMobileSheetOpen(false)}
+                aria-label="빠른 액션 닫기"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className={styles.quickSheetActions}>
+              <a href={`tel:${siteConfig.customerPhone}`} className={styles.quickSheetAction}>
+                <span className={styles.quickSheetIcon} data-tone="chat">
+                  <SystemIcon name="chat" />
+                </span>
+                <span>
+                  <strong>전화 상담</strong>
+                  <em>{siteConfig.customerPhone}</em>
+                </span>
+              </a>
+
+              {youtubeAction ? (
+                <Link
+                  href={youtubeAction.href}
+                  className={styles.quickSheetAction}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span className={styles.quickSheetIcon} data-tone="youtube">
+                    <SystemIcon name="youtube" />
+                  </span>
+                  <span>
+                    <strong>유튜브</strong>
+                    <em>요양이 TV 바로가기</em>
+                  </span>
+                </Link>
+              ) : null}
+
+              {blogAction ? (
+                <Link
+                  href={blogAction.href}
+                  className={styles.quickSheetAction}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span className={styles.quickSheetIcon} data-tone="blog">
+                    <SystemIcon name="blog" />
+                  </span>
+                  <span>
+                    <strong>블로그</strong>
+                    <em>요양 정보 보러가기</em>
+                  </span>
+                </Link>
+              ) : null}
+            </div>
           </section>
         </div>
       ) : null}

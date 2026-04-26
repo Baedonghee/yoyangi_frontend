@@ -16,9 +16,11 @@
   flex: 0 0 100%;
   aspect-ratio: 1920 / 557;
   background: #e5e7eb;
+  line-height: 0;
 }
 
 .image {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -29,6 +31,14 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg, rgba(15, 23, 42, 0.02) 0%, rgba(15, 23, 42, 0.18) 100%);
+}
+
+.mobileImage {
+  display: none;
+}
+
+.mobileDots {
+  display: none;
 }
 
 .arrow {
@@ -75,28 +85,47 @@
 
 @media (max-width: 720px) {
   .carousel {
-    border-radius: 0 0 28px 28px;
+    border-radius: 0;
+    background: transparent !important;
+    box-shadow: none;
+  }
+
+  .track {
+    background: transparent !important;
   }
 
   .overlay {
-    background: linear-gradient(180deg, rgba(15, 23, 42, 0.24) 0%, rgba(15, 23, 42, 0.54) 100%);
+    display: none;
   }
 
   .slide {
-    aspect-ratio: 16 / 10;
-    min-height: 340px;
+    aspect-ratio: auto;
+    height: auto;
+    min-height: 0;
+    background: transparent;
+  }
+
+  .image {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: center center;
+  }
+
+  .desktopImageWithMobile {
+    display: none;
+  }
+
+  .mobileImage {
+    display: block;
   }
 
   .arrow {
-    width: 38px;
-    height: 38px;
+    display: none;
   }
 
-  .leftArrow {
-    left: 12px;
-  }
-
-  .rightArrow {
-    right: 12px;
+  .mobileDots {
+    display: none;
   }
 }

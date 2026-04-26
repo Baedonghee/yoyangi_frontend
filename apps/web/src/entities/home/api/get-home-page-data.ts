@@ -114,22 +114,53 @@ function toInternalHref(url: string) {
   }
 }
 
+function findBannerImage(
+  images: BannerApiItem["images"],
+  matcher: (type: string) => boolean
+) {
+  return images.find((image) => matcher(image.type.trim().toUpperCase()))?.imageUrl;
+}
+
+function isPcBannerType(type: string) {
+  return type === "PC" || type === "DESKTOP" || type === "WEB";
+}
+
+function isMobileBannerType(type: string) {
+  return (
+    type === "MOBILE" ||
+    type === "MO" ||
+    type === "APP" ||
+    type.includes("MOBILE") ||
+    type.startsWith("MO_") ||
+    type.endsWith("_MO")
+  );
+}
+
 function mapBanners(list: BannerApiItem[]): HeroBanner[] {
-  return list.map((banner, index) => ({
-    id: banner.bannerId,
-    title: banner.title || mockHomePageData.heroBanners[index]?.title || "요양이 메인 배너",
-    description:
-      banner.description ||
-      mockHomePageData.heroBanners[index]?.description ||
-      "요양시설을 빠르게 찾고 비교할 수 있는 메인 추천 배너입니다.",
-    imageUrl:
-      banner.images.find((image) => image.type === "PC")?.imageUrl ||
+  return list.map((banner, index) => {
+    const pcImage =
+      findBannerImage(banner.images, isPcBannerType) ||
       banner.images[0]?.imageUrl ||
       mockHomePageData.heroBanners[index]?.imageUrl ||
-      "",
-    href: toInternalHref(banner.linkUrl),
-    ctaLabel: mockHomePageData.heroBanners[index]?.ctaLabel || "자세히 보기"
-  }));
+      "";
+    const mobileImage =
+      findBannerImage(banner.images, isMobileBannerType) ||
+      banner.images.find((image) => image.imageUrl !== pcImage)?.imageUrl ||
+      undefined;
+
+    return {
+      id: banner.bannerId,
+      title: banner.title || mockHomePageData.heroBanners[index]?.title || "요양이 메인 배너",
+      description:
+        banner.description ||
+        mockHomePageData.heroBanners[index]?.description ||
+        "요양시설을 빠르게 찾고 비교할 수 있는 메인 추천 배너입니다.",
+      imageUrl: pcImage,
+      mobileImageUrl: mobileImage,
+      href: toInternalHref(banner.linkUrl),
+      ctaLabel: mockHomePageData.heroBanners[index]?.ctaLabel || "자세히 보기"
+    };
+  });
 }
 
 function extractYoutubeId(url: string) {

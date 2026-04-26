@@ -55,9 +55,19 @@ export function BannerCarousel({ items }: BannerCarouselProps) {
               <img
                 src={item.imageUrl}
                 alt={item.title}
-                className={styles.image}
+                className={`${styles.image} ${
+                  item.mobileImageUrl ? styles.desktopImageWithMobile : ""
+                }`}
                 loading={index === 0 ? "eager" : "lazy"}
               />
+              {item.mobileImageUrl ? (
+                <img
+                  src={item.mobileImageUrl}
+                  alt={item.title}
+                  className={`${styles.image} ${styles.mobileImage}`}
+                  loading={index === 0 ? "eager" : "lazy"}
+                />
+              ) : null}
               <div className={styles.overlay} />
             </article>
           );
@@ -83,6 +93,17 @@ export function BannerCarousel({ items }: BannerCarouselProps) {
             <SystemIcon name="arrow-right" />
           </button>
         </>
+      ) : null}
+
+      {items.length > 1 ? (
+        <div className={styles.mobileDots} aria-hidden="true">
+          {items.map((item, index) => (
+            <span
+              key={item.id}
+              className={index === currentIndex ? styles.mobileDotActive : ""}
+            />
+          ))}
+        </div>
       ) : null}
     </div>
   );

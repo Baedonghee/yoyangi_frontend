@@ -197,6 +197,88 @@
   background: rgba(226, 232, 240, 0.72);
 }
 
+.partnerPromo {
+  position: relative;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  width: min(976px, 100%);
+  min-height: 82px;
+  margin: -4px auto 0;
+  padding: 18px 20px 18px 24px;
+  overflow: hidden;
+  border: 1px solid rgba(29, 60, 115, 0.13);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 12% 20%, rgba(255, 255, 255, 0.24), transparent 32%),
+    linear-gradient(135deg, #193866 0%, var(--color-primary) 52%, #27518d 100%);
+  color: #fff;
+  box-shadow: 0 16px 34px rgba(29, 60, 115, 0.16);
+}
+
+.partnerPromo::after {
+  position: absolute;
+  right: -38px;
+  top: -60px;
+  width: 148px;
+  height: 148px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  content: "";
+}
+
+.partnerPromoText {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 4px;
+}
+
+.partnerPromoText strong {
+  font-size: 1.1rem;
+  font-weight: 760;
+  letter-spacing: -0.035em;
+}
+
+.partnerPromoText span {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.partnerPromoButton {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-width: 102px;
+  min-height: 42px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--color-primary);
+  font-size: 0.92rem;
+  font-weight: 760;
+}
+
+.consultPromo {
+  display: block;
+  width: min(976px, 100%);
+  margin: -2px auto 0;
+}
+
+.consultPromo img {
+  width: 100%;
+  height: auto;
+}
+
+.consultPromoMobile {
+  display: none;
+}
+
 .sectionSpacing {
   display: grid;
   gap: 48px;
@@ -210,24 +292,55 @@
 
   .main {
     width: min(100%, calc(100% - 16px));
-    gap: 34px;
+    gap: 30px;
+  }
+
+  .quickSearch {
+    margin-top: -18px;
   }
 
   .quickSearchCard {
-    width: min(100%, calc(100% - 16px));
-    min-height: 62px;
-    flex-wrap: wrap;
-    gap: 10px;
+    display: flex;
+    width: min(100%, calc(100% - 20px));
+    min-height: 56px;
+    gap: 8px;
+    margin-bottom: 18px;
+    padding: 8px;
     border-radius: 18px;
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.11);
+  }
+
+  .quickSearchLabel {
+    padding: 8px 10px;
+    border-radius: 11px;
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+
+  .quickSearchIcon {
+    flex: 0 0 auto;
+    width: 17px;
+    height: 17px;
+  }
+
+  .quickSearchCard input {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 0.82rem;
   }
 
   .quickSearchButton {
-    width: 100%;
+    flex: 0 0 auto;
+    min-width: 76px;
+    min-height: 40px;
+    padding: 0 12px;
+    border-radius: 12px;
+    font-size: 0.84rem;
   }
 
   .categoryGrid {
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 18px 8px;
+    gap: 17px 8px;
     margin-inline: -2px;
   }
 
@@ -248,6 +361,57 @@
 
   .categoryLabel {
     font-size: 0.78rem;
+  }
+
+  .partnerPromo {
+    display: flex;
+    width: min(100%, 360px);
+    min-height: 68px;
+    gap: 10px;
+    margin: 0 auto;
+    padding: 14px 14px 14px 16px;
+    border-radius: 18px;
+    box-shadow: 0 12px 26px rgba(29, 60, 115, 0.13);
+  }
+
+  .partnerPromo::after {
+    right: -52px;
+    top: -66px;
+    width: 128px;
+    height: 128px;
+  }
+
+  .partnerPromoText {
+    gap: 2px;
+  }
+
+  .partnerPromoText strong {
+    font-size: 0.92rem;
+  }
+
+  .partnerPromoText span {
+    font-size: 0.74rem;
+    line-height: 1.35;
+  }
+
+  .partnerPromoButton {
+    min-width: 74px;
+    min-height: 34px;
+    padding: 0 10px;
+    font-size: 0.76rem;
+  }
+
+  .consultPromo {
+    width: min(100%, 360px);
+    margin: 2px auto 0;
+  }
+
+  .consultPromoDesktop {
+    display: none;
+  }
+
+  .consultPromoMobile {
+    display: block;
   }
 
   .divider {

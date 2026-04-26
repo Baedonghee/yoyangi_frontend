@@ -18,6 +18,8 @@ export function SiteHeader() {
   const router = useRouter();
   const [user, setUser] = useState<UserPayload | null>(null);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const standardNavigation = globalNavigation.filter((item) => !item.emphasized);
   const emphasizedNavigation = globalNavigation.filter((item) => item.emphasized);
@@ -50,6 +52,12 @@ export function SiteHeader() {
   }, [router.asPath]);
 
   useEffect(() => {
+    setIsMobileMenuOpen(false);
+    setIsMobileSearchOpen(false);
+    setIsUserMenuOpen(false);
+  }, [router.asPath]);
+
+  useEffect(() => {
     function handlePointerDown(event: MouseEvent) {
       if (!userMenuRef.current?.contains(event.target as Node)) {
         setIsUserMenuOpen(false);
@@ -70,87 +78,190 @@ export function SiteHeader() {
   };
 
   return (
-    <header className={styles.header}>
-      <div className={styles.headerInner}>
-        <Link href="/" className={styles.brand}>
-          <Image
-            src="/image/logo.png"
-            alt="요양이 로고"
-            width={396}
-            height={220}
-            priority
-            className={styles.brandLogo}
-          />
-        </Link>
+    <>
+      <header className={styles.header}>
+        <div className={styles.headerInner}>
+          <button
+            type="button"
+            className={styles.mobileMenuButton}
+            aria-label="메뉴 열기"
+            aria-expanded={isMobileMenuOpen}
+            onClick={() => setIsMobileMenuOpen((current) => !current)}
+          >
+            <MenuIcon />
+          </button>
 
-        <form action="/search" method="get" className={styles.searchForm}>
-          <div className={styles.searchField}>
-            <input
-              type="search"
-              name="keyword"
-              placeholder="어떤 요양시설을 찾으시나요?"
-              aria-label="시설 검색"
+          <Link href="/" className={styles.brand}>
+            <Image
+              src="/image/logo.png"
+              alt="요양이 로고"
+              width={396}
+              height={220}
+              priority
+              className={styles.brandLogo}
             />
-            <button
-              type="submit"
-              className={styles.searchButton}
-              aria-label="검색"
-            >
-              <SystemIcon name="search" />
-            </button>
-          </div>
-        </form>
+          </Link>
 
-        <nav className={styles.navigation}>
-          {visibleStandardNavigation.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={styles.navLink}
-            >
-              {item.label}
-            </Link>
-          ))}
-          {user ? (
-            <div className={styles.userMenu} ref={userMenuRef}>
+          <button
+            type="button"
+            className={styles.mobileSearchButton}
+            aria-label="검색 열기"
+            aria-expanded={isMobileSearchOpen}
+            onClick={() => setIsMobileSearchOpen((current) => !current)}
+          >
+            <SystemIcon name="search" />
+          </button>
+
+          <form
+            action="/search"
+            method="get"
+            className={`${styles.searchForm} ${isMobileSearchOpen ? styles.searchFormOpen : ""}`}
+          >
+            <div className={styles.searchField}>
+              <input
+                type="search"
+                name="keyword"
+                placeholder="어떤 요양시설을 찾으시나요?"
+                aria-label="시설 검색"
+              />
+              <button
+                type="submit"
+                className={styles.searchButton}
+                aria-label="검색"
+              >
+                <SystemIcon name="search" />
+              </button>
+            </div>
+          </form>
+
+          <nav className={styles.navigation}>
+            {visibleStandardNavigation.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={styles.navLink}
+              >
+                {item.label}
+              </Link>
+            ))}
+            {user ? (
+              <div className={styles.userMenu} ref={userMenuRef}>
+                <button
+                  type="button"
+                  className={styles.userButton}
+                  aria-expanded={isUserMenuOpen}
+                  onClick={() => setIsUserMenuOpen((current) => !current)}
+                >
+                  <span className={styles.userAvatar} aria-hidden="true">
+                    <UserIcon />
+                  </span>
+                  <span className={styles.userName}>{userName}</span>
+                </button>
+                {isUserMenuOpen ? (
+                  <div className={styles.userDropdown}>
+                    <Link href="/my" onClick={() => setIsUserMenuOpen(false)}>
+                      마이페이지
+                    </Link>
+                    <button type="button" onClick={handleLogout}>
+                      로그아웃
+                    </button>
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+            {shouldShowDivider ? (
+              <span className={styles.navDivider} />
+            ) : null}
+            {emphasizedNavigation.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={styles.navLinkPrimary}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
+      </header>
+
+      {isMobileMenuOpen ? (
+        <div
+          className={styles.mobileMenuOverlay}
+          role="presentation"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          <aside
+            className={styles.mobileMenuPanel}
+            role="dialog"
+            aria-modal="true"
+            aria-label="모바일 메뉴"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className={styles.mobileMenuHead}>
+              <Image
+                src="/image/logo.png"
+                alt="요양이 로고"
+                width={396}
+                height={220}
+                className={styles.mobileMenuLogo}
+              />
               <button
                 type="button"
-                className={styles.userButton}
-                aria-expanded={isUserMenuOpen}
-                onClick={() => setIsUserMenuOpen((current) => !current)}
+                className={styles.mobileMenuClose}
+                aria-label="메뉴 닫기"
+                onClick={() => setIsMobileMenuOpen(false)}
               >
+                ×
+              </button>
+            </div>
+            {user ? (
+              <div className={styles.mobileUserSummary}>
                 <span className={styles.userAvatar} aria-hidden="true">
                   <UserIcon />
                 </span>
-                <span className={styles.userName}>{userName}</span>
-              </button>
-              {isUserMenuOpen ? (
-                <div className={styles.userDropdown}>
-                  <Link href="/my" onClick={() => setIsUserMenuOpen(false)}>
-                    마이페이지
-                  </Link>
+                <strong>{userName}</strong>
+              </div>
+            ) : null}
+            <div className={styles.mobileMenuLinks}>
+              {user ? (
+                <>
+                  <Link href="/my">마이페이지</Link>
                   <button type="button" onClick={handleLogout}>
                     로그아웃
                   </button>
-                </div>
-              ) : null}
+                </>
+              ) : (
+                visibleStandardNavigation.map((item) => (
+                  <Link key={item.href} href={item.href}>
+                    {item.label}
+                  </Link>
+                ))
+              )}
+              {emphasizedNavigation.map((item) => (
+                <Link key={item.href} href={item.href}>
+                  {item.label}
+                </Link>
+              ))}
             </div>
-          ) : null}
-          {shouldShowDivider ? (
-            <span className={styles.navDivider} />
-          ) : null}
-          {emphasizedNavigation.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={styles.navLinkPrimary}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-      </div>
-    </header>
+          </aside>
+        </div>
+      ) : null}
+    </>
+  );
+}
+
+function MenuIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M5 7h14M5 12h14M5 17h14"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="1.8"
+      />
+    </svg>
   );
 }
 
