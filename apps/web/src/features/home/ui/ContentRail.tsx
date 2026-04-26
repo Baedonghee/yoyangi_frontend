@@ -90,10 +90,14 @@ export function ContentRail({
                       {item.subtitle}
                     </p>
                     <div className={styles.recommendedFooter}>
-                      <span className={styles.rating}>
-                        <SystemIcon name="star" />
-                        {item.rating?.toFixed(1)}
-                      </span>
+                      {typeof item.rating === "number" ? (
+                        <span className={styles.rating}>
+                          <SystemIcon name="star" />
+                          {item.rating.toFixed(1)}
+                        </span>
+                      ) : (
+                        <span />
+                      )}
                       <span className={styles.consultationLabel}>
                         {item.consultationLabel}
                       </span>
@@ -181,4 +185,3 @@ export function RailSkeleton({
     </section>
   );
 }
-

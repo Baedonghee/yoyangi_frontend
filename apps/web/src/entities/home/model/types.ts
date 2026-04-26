@@ -67,7 +67,7 @@ export type RecommendedFacility = {
   id: string;
   name: string;
   location: string;
-  rating: number;
+  rating?: number;
   imageUrl: string;
   href: string;
   badge: string;
@@ -89,4 +89,3 @@ export type HomePageData = {
   tvItems: VideoItem[];
   regionalFacilities: RegionItem[];
 };
-

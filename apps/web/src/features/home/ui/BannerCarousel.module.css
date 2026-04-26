@@ -28,48 +28,8 @@
 .overlay {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: center;
   background:
     linear-gradient(90deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.18) 18%, rgba(15, 23, 42, 0.32) 40%, rgba(15, 23, 42, 0.1) 62%, rgba(255, 255, 255, 0.72) 100%);
-}
-
-.content {
-  width: min(1100px, calc(100% - 72px));
-  margin: 0 auto;
-  color: #fff;
-  padding-inline: 24px;
-}
-
-.content h1,
-.content h2 {
-  max-width: 9.5ch;
-  margin: 0 0 16px;
-  font-size: clamp(2rem, 4.4vw, 3.2rem);
-  font-weight: 900;
-  letter-spacing: -0.05em;
-  line-height: 1.05;
-}
-
-.content p {
-  max-width: 38ch;
-  margin: 0 0 20px;
-  color: rgba(255, 255, 255, 0.9);
-  font-size: clamp(0.9rem, 1.5vw, 1rem);
-  font-weight: 500;
-}
-
-.cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 46px;
-  padding: 0 18px;
-  border-radius: 999px;
-  background: #fff;
-  color: #111827;
-  font-weight: 800;
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18);
 }
 
 .dots {
@@ -96,16 +56,6 @@
 }
 
 @media (max-width: 720px) {
-  .content {
-    width: min(100%, calc(100% - 20px));
-    padding-inline: 0;
-  }
-
-  .content h1,
-  .content h2 {
-    margin-bottom: 12px;
-  }
-
   .carousel {
     border-radius: 0 0 28px 28px;
   }

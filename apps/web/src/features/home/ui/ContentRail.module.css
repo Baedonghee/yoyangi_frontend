@@ -28,7 +28,7 @@
 }
 
 .headerLink:hover {
-  color: #f97316;
+  color: var(--color-primary);
 }
 
 .headerLink svg {
@@ -74,8 +74,8 @@
 }
 
 .arrow:hover {
-  background: #f97316;
-  border-color: #f97316;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
   color: #fff;
 }
 
@@ -158,7 +158,7 @@
   z-index: 1;
   padding: 5px 9px;
   border-radius: 10px;
-  background: #f97316;
+  background: var(--color-primary);
   color: #fff;
   font-size: 0.72rem;
   font-weight: 800;
@@ -244,8 +244,8 @@
   position: static;
   padding: 6px 10px;
   border-radius: 999px;
-  background: #fff7ed;
-  color: #f97316;
+  background: rgba(29, 60, 115, 0.08);
+  color: var(--color-primary);
   font-size: 0.72rem;
   font-weight: 800;
 }
@@ -365,4 +365,3 @@
     font-size: 1.4rem;
   }
 }
-

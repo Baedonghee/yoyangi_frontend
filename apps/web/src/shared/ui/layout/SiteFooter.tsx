@@ -1,10 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import {
   footerLinkGroups,
   siteConfig
 } from "@/shared/config/site";
-import { SystemIcon } from "@/shared/ui/icons/SystemIcon";
 import styles from "@/shared/ui/layout/SiteChrome.module.css";
 
 export function SiteFooter() {
@@ -14,13 +14,14 @@ export function SiteFooter() {
         <div className={styles.footerTop}>
           <div className={styles.footerBrand}>
             <div className={styles.brand}>
-              <span className={styles.brandMark}>
-                <SystemIcon name="heart" />
-              </span>
-              <span className={styles.brandText}>
-                <strong>{siteConfig.name}</strong>
-                <span>Care Discovery Platform</span>
-              </span>
+              <Image
+                src="/image/logo.png"
+                alt="요양이 로고"
+                width={396}
+                height={220}
+                className={styles.brandLogo}
+              />
+              <span className={styles.brandCaption}>Care Discovery Platform</span>
             </div>
             <p>안심하고 맡길 수 있는 가족을 위한 첫 걸음을 함께 만듭니다.</p>
           </div>
@@ -59,4 +60,3 @@ export function SiteFooter() {
     </footer>
   );
 }
-

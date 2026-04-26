@@ -46,7 +46,7 @@
 .quickSearchIcon {
   width: 20px;
   height: 20px;
-  color: #f97316;
+  color: var(--color-primary);
 }
 
 .quickSearchButton {
@@ -58,7 +58,7 @@
   padding: 0 18px;
   border: 0;
   border-radius: 999px;
-  background: linear-gradient(135deg, #ff8d3a 0%, #ff6a1e 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-strong) 100%);
   color: #fff;
   font-weight: 800;
 }
@@ -97,8 +97,8 @@
 }
 
 .tone-orange {
-  background: #ffedd5;
-  color: #f97316;
+  background: rgba(29, 60, 115, 0.12);
+  color: var(--color-primary);
 }
 
 .tone-green {

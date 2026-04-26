@@ -14,7 +14,8 @@ export const siteConfig = {
   contactEmail: "contact@yoyangi.co.kr",
   customerPhone: "1588-0000",
   customerHours: "평일 09:00 - 18:00",
-  serverApiBaseUrl: process.env.YOYANGI_SERVER_API_BASE_URL ?? ""
+  serverApiBaseUrl:
+    process.env.YOYANGI_SERVER_API_BASE_URL ?? "http://localhost:3001"
 } as const;
 
 export const globalNavigation: NavigationItem[] = [

@@ -4,7 +4,7 @@ import type {
   RecommendedFacility
 } from "@/entities/home/model/types";
 
-const categories: HomeCategory[] = [
+export const homeCategories: HomeCategory[] = [
   { id: "nursing-home", label: "요양원", href: "/search", icon: "building", tone: "orange" },
   { id: "day-care", label: "주야간보호", href: "/search", icon: "home", tone: "green" },
   { id: "home-care", label: "방문요양", href: "/search", icon: "user-plus", tone: "blue" },
@@ -64,7 +64,7 @@ export const mockHomePageData: HomePageData = {
       ctaLabel: "지역별 보기"
     }
   ],
-  categories,
+  categories: homeCategories,
   tvItems: [
     {
       id: "tv-1",
@@ -208,4 +208,3 @@ export const mockRecommendedFacilities: RecommendedFacility[] = [
     consultationLabel: "상담 가능"
   }
 ];
-

@@ -3,6 +3,10 @@
   font-family: "Pretendard Variable", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   line-height: 1.5;
   text-rendering: optimizeLegibility;
+  --color-primary: #1d3c73;
+  --color-primary-strong: #16315f;
+  --color-primary-soft: rgba(29, 60, 115, 0.12);
+  --color-primary-softer: rgba(29, 60, 115, 0.08);
 }
 
 * {

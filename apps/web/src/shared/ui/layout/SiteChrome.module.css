@@ -19,40 +19,19 @@
 
 .brand {
   display: inline-flex;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
   color: #111827;
 }
 
-.brandMark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 42px;
-  height: 42px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #ff8d3a 0%, #ff6a1e 100%);
-  color: #fff;
-  box-shadow: 0 10px 24px rgba(249, 115, 22, 0.24);
+.brandLogo {
+  width: auto;
+  height: 34px;
+  object-fit: contain;
 }
 
-.brandMark svg {
-  width: 22px;
-  height: 22px;
-}
-
-.brandText {
-  display: grid;
-  gap: 2px;
-}
-
-.brandText strong {
-  font-size: 1.45rem;
-  font-weight: 900;
-  letter-spacing: -0.05em;
-}
-
-.brandText span {
+.brandCaption {
   color: #6b7280;
   font-size: 0.72rem;
   font-weight: 700;
@@ -86,9 +65,9 @@
 }
 
 .searchField input:focus {
-  border-color: rgba(249, 115, 22, 0.6);
+  border-color: rgba(29, 60, 115, 0.52);
   background: #fff;
-  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.12);
+  box-shadow: 0 0 0 4px var(--color-primary-soft);
 }
 
 .searchButton {
@@ -102,7 +81,7 @@
   padding: 0;
   border: 0;
   border-radius: 999px;
-  background: linear-gradient(135deg, #ff8d3a 0%, #ff6a1e 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-strong) 100%);
   color: #fff;
 }
 
@@ -145,12 +124,12 @@
 }
 
 .navLink:hover {
-  color: #f97316;
+  color: var(--color-primary);
 }
 
 .navLinkPrimary {
-  border: 1px solid rgba(249, 115, 22, 0.3);
-  color: #f97316;
+  border: 1px solid rgba(29, 60, 115, 0.26);
+  color: var(--color-primary);
 }
 
 .navDivider {
@@ -183,6 +162,10 @@
   gap: 14px;
 }
 
+.footerBrand .brandLogo {
+  height: 32px;
+}
+
 .footerBrand p,
 .footerGroup a,
 .footerGroup span,
@@ -209,7 +192,7 @@
 }
 
 .footerPhone {
-  color: #f97316;
+  color: var(--color-primary);
   font-size: 2rem;
   font-weight: 900;
   letter-spacing: -0.04em;
@@ -295,8 +278,8 @@
     gap: 14px;
   }
 
-  .brandText strong {
-    font-size: 1.25rem;
+  .brandLogo {
+    height: 30px;
   }
 
   .navigation {

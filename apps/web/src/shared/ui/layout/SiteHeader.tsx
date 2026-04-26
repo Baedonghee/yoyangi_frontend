@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { globalNavigation } from "@/shared/config/site";
@@ -9,13 +10,14 @@ export function SiteHeader() {
     <header className={styles.header}>
       <div className={styles.headerInner}>
         <Link href="/" className={styles.brand}>
-          <span className={styles.brandMark}>
-            <SystemIcon name="heart" />
-          </span>
-          <span className={styles.brandText}>
-            <strong>요양이</strong>
-            <span>Care Discovery Platform</span>
-          </span>
+          <Image
+            src="/image/logo.png"
+            alt="요양이 로고"
+            width={396}
+            height={220}
+            priority
+            className={styles.brandLogo}
+          />
         </Link>
 
         <form action="/search" method="get" className={styles.searchForm}>
@@ -26,7 +28,11 @@ export function SiteHeader() {
               placeholder="어떤 요양시설을 찾으시나요?"
               aria-label="시설 검색"
             />
-            <button type="submit" className={styles.searchButton} aria-label="검색">
+            <button
+              type="submit"
+              className={styles.searchButton}
+              aria-label="검색"
+            >
               <SystemIcon name="search" />
             </button>
           </div>
@@ -50,4 +56,3 @@ export function SiteHeader() {
     </header>
   );
 }
-

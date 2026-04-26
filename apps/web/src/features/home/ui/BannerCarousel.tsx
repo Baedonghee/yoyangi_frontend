@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { startTransition, useEffect, useState } from "react";
 
 import type { HeroBanner } from "@/entities/home/model/types";
@@ -32,8 +31,6 @@ export function BannerCarousel({ items }: BannerCarouselProps) {
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
         {items.map((item, index) => {
-          const HeadingTag = index === 0 ? "h1" : "h2";
-
           return (
             <article key={item.id} className={styles.slide}>
               <img
@@ -42,15 +39,7 @@ export function BannerCarousel({ items }: BannerCarouselProps) {
                 className={styles.image}
                 loading={index === 0 ? "eager" : "lazy"}
               />
-              <div className={styles.overlay}>
-                <div className={styles.content}>
-                  <HeadingTag>{item.title}</HeadingTag>
-                  <p>{item.description}</p>
-                  <Link href={item.href} className={styles.cta}>
-                    {item.ctaLabel}
-                  </Link>
-                </div>
-              </div>
+              <div className={styles.overlay} />
             </article>
           );
         })}
@@ -75,4 +64,3 @@ export function BannerCarousel({ items }: BannerCarouselProps) {
     </div>
   );
 }
-
