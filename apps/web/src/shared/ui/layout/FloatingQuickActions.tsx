@@ -4,14 +4,18 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { quickActions, siteConfig } from "@/shared/config/site";
+import { formatKoreanPhoneNumber } from "@/shared/lib/format-phone";
 import { SystemIcon } from "@/shared/ui/icons/SystemIcon";
 import styles from "@/shared/ui/layout/SiteChrome.module.css";
 
 export function FloatingQuickActions() {
   const [isConsultModalOpen, setIsConsultModalOpen] = useState(false);
   const [isMobileSheetOpen, setIsMobileSheetOpen] = useState(false);
-  const youtubeAction = quickActions.find((action) => action.icon === "youtube");
+  const youtubeAction = quickActions.find(
+    (action) => action.icon === "youtube",
+  );
   const blogAction = quickActions.find((action) => action.icon === "blog");
+  const customerPhone = formatKoreanPhoneNumber(siteConfig.customerPhone);
 
   useEffect(() => {
     if (!isConsultModalOpen && !isMobileSheetOpen) {
@@ -47,7 +51,10 @@ export function FloatingQuickActions() {
                 className={styles.floatingLink}
                 onClick={() => setIsConsultModalOpen(true)}
               >
-                <SystemIcon name={action.icon} className={styles.floatingIcon} />
+                <SystemIcon
+                  name={action.icon}
+                  className={styles.floatingIcon}
+                />
                 <span>{action.label}</span>
               </button>
             );
@@ -99,10 +106,12 @@ export function FloatingQuickActions() {
               <SystemIcon name="chat" />
             </div>
             <h2 id="consult-title">고객센터</h2>
-            <a href="tel:1577-5776" className={styles.consultPhone}>
-              1577-5776
+            <a href={`tel:${customerPhone}`} className={styles.consultPhone}>
+              {customerPhone}
             </a>
-            <p className={styles.consultHelp}>전화연결은 모바일에서 가능합니다</p>
+            <p className={styles.consultHelp}>
+              전화연결은 모바일에서 가능합니다
+            </p>
             <button
               type="button"
               className={styles.consultConfirm}
@@ -144,13 +153,16 @@ export function FloatingQuickActions() {
             </div>
 
             <div className={styles.quickSheetActions}>
-              <a href={`tel:${siteConfig.customerPhone}`} className={styles.quickSheetAction}>
+              <a
+                href={`tel:${customerPhone}`}
+                className={styles.quickSheetAction}
+              >
                 <span className={styles.quickSheetIcon} data-tone="chat">
                   <SystemIcon name="chat" />
                 </span>
                 <span>
                   <strong>전화 상담</strong>
-                  <em>{siteConfig.customerPhone}</em>
+                  <em>{customerPhone}</em>
                 </span>
               </a>
 

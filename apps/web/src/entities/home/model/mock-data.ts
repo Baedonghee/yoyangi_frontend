@@ -65,6 +65,7 @@ export const mockHomePageData: HomePageData = {
     }
   ],
   categories: homeCategories,
+  careYoutubeItems: [],
   tvItems: [
     {
       id: "tv-1",

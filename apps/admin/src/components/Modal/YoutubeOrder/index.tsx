@@ -38,10 +38,12 @@ const Container = styled.div`
 interface IYoutubeOrder {
   onClose: () => void;
   handleChangeOrder: (list: IYoutube[]) => void;
+  endpoint?: string;
+  label?: string;
 }
 
-const YoutubeOrder: React.FC<IYoutubeOrder> = ({ onClose, handleChangeOrder }) => {
-  const { getYoutubes } = useYoutubeActions();
+const YoutubeOrder: React.FC<IYoutubeOrder> = ({ onClose, handleChangeOrder, endpoint, label = '요양이TV' }) => {
+  const { getYoutubes } = useYoutubeActions({ endpoint });
   const { handleShowAlert } = useAlert();
   const [list, setList] = useState<IYoutube[]>([]);
 
@@ -56,7 +58,7 @@ const YoutubeOrder: React.FC<IYoutubeOrder> = ({ onClose, handleChangeOrder }) =
     } catch (err) {
       handleShowAlert({
         description: isCustomError(err),
-        title: '유튜브 목록 조회 실패',
+        title: `${label} 목록 조회 실패`,
         type: 'error',
       });
     }
@@ -81,7 +83,7 @@ const YoutubeOrder: React.FC<IYoutubeOrder> = ({ onClose, handleChangeOrder }) =
   };
 
   return (
-    <ModalLayout title="유튜브 순서 변경" width="1000px" onClose={onClose}>
+    <ModalLayout title={`${label} 순서 변경`} width="1000px" onClose={onClose}>
       <Container>
         <Box mt="24px">
           <table className="my-table">

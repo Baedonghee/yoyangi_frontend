@@ -1,4 +1,5 @@
 import Head from "next/head";
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -9,9 +10,10 @@ import {
   requestMe,
   signupWithKakaoAccessToken
 } from "@/entities/auth/api/kakao-auth";
+import { normalizeContinuePath } from "@/shared/lib/auth-redirect";
 import styles from "@/widgets/auth/ui/AuthPage.module.css";
 
-export default function KakaoCallbackPage() {
+const KakaoCallbackPage: NextPage & { noChrome?: boolean } = () => {
   const router = useRouter();
   const [message, setMessage] = useState("카카오 인증을 확인하고 있습니다.");
 
@@ -39,9 +41,10 @@ export default function KakaoCallbackPage() {
         mode === "login"
           ? await loginOrSignup(kakaoAccessToken)
           : await signupOrLogin(kakaoAccessToken);
+      const nextPath = normalizeContinuePath(continueUrl);
 
       await requestMe(accessToken);
-      await router.replace(continueUrl || "/");
+      await router.replace(nextPath || "/");
     } catch (error) {
       console.error("[kakao-auth]", error);
       setMessage(
@@ -66,7 +69,11 @@ export default function KakaoCallbackPage() {
       </main>
     </>
   );
-}
+};
+
+KakaoCallbackPage.noChrome = true;
+
+export default KakaoCallbackPage;
 
 async function loginOrSignup(kakaoAccessToken: string) {
   const loginToken = await loginWithKakaoAccessToken(kakaoAccessToken);

@@ -6,7 +6,11 @@ import { IApi, IApiList } from 'types/common';
 import { IYoutube, IYoutubeDetail, IYoutubeForm, IYoutubeOrderForm, IYoutubeQuery } from 'types/youtube';
 import axios from 'utils/axios';
 
-function useYoutubeActions() {
+interface IUseYoutubeActionsOptions {
+  endpoint?: string;
+}
+
+function useYoutubeActions({ endpoint = '/v1/youtubes' }: IUseYoutubeActionsOptions = {}) {
   const setYoutube = useSetRecoilState(youtubeAtom);
 
   async function getYoutubes(queryForm: IYoutubeQuery) {
@@ -16,7 +20,7 @@ function useYoutubeActions() {
         page: queryForm.page || 1,
         size: 20,
       };
-      const url = `/v1/youtubes?${qs.stringify(query)}`;
+      const url = `${endpoint}?${qs.stringify(query)}`;
       const {
         data: { status, message, list, page },
       }: AxiosResponse<IApiList<IYoutube[]>> = await axios.get(url);
@@ -35,7 +39,7 @@ function useYoutubeActions() {
     try {
       const {
         data: { status, message },
-      }: AxiosResponse<IApi> = await axios.post('/v1/youtubes', form);
+      }: AxiosResponse<IApi> = await axios.post(endpoint, form);
       if (status !== 200) {
         throw message;
       }
@@ -48,7 +52,7 @@ function useYoutubeActions() {
     try {
       const {
         data: { status, message },
-      }: AxiosResponse<IApi> = await axios.patch(`/v1/youtubes/${youtubeId}`, form);
+      }: AxiosResponse<IApi> = await axios.patch(`${endpoint}/${youtubeId}`, form);
       if (status !== 200) {
         throw message;
       }
@@ -59,7 +63,7 @@ function useYoutubeActions() {
 
   async function getYoutube(youtubeId: string) {
     try {
-      const url = `/v1/youtubes/${youtubeId}`;
+      const url = `${endpoint}/${youtubeId}`;
       const {
         data: { status, message, data },
       }: AxiosResponse<IApi<IYoutubeDetail>> = await axios.get(url);
@@ -77,7 +81,7 @@ function useYoutubeActions() {
     try {
       const {
         data: { status, message },
-      }: AxiosResponse<IApi> = await axios.put('/v1/youtubes/order', { youtubes: youtubeOrderForm });
+      }: AxiosResponse<IApi> = await axios.put(`${endpoint}/order`, { youtubes: youtubeOrderForm });
       if (status !== 200) {
         throw message;
       }
@@ -90,7 +94,7 @@ function useYoutubeActions() {
     try {
       const {
         data: { status, message },
-      }: AxiosResponse<IApi> = await axios.delete(`/v1/youtubes/${youtubeId}`);
+      }: AxiosResponse<IApi> = await axios.delete(`${endpoint}/${youtubeId}`);
       if (status !== 200) {
         throw message;
       }

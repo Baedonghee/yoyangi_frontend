@@ -51,17 +51,32 @@ export const sideMenuLis: SideMenuList[] = [
     ],
   },
   {
-    title: '유튜브',
+    title: '요양이TV',
     name: 'youtube',
     code: 'A4',
     list: [
       {
-        title: '유튜브 목록',
+        title: '요양이TV 목록',
         path: PATH.YOUTUBE_LIST,
       },
       {
-        title: '유튜브 등록',
+        title: '요양이TV 등록',
         path: PATH.YOUTUBE_ADD,
+      },
+    ],
+  },
+  {
+    title: '요양여지도',
+    name: 'care-youtube',
+    code: 'A8',
+    list: [
+      {
+        title: '요양여지도 목록',
+        path: PATH.CARE_YOUTUBE_LIST,
+      },
+      {
+        title: '요양여지도 등록',
+        path: PATH.CARE_YOUTUBE_ADD,
       },
     ],
   },

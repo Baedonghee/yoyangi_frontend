@@ -108,11 +108,24 @@
 }
 
 .recommendedCard {
+  position: relative;
   border: 1px solid #e5e7eb;
   border-radius: 18px;
   background: #fff;
   overflow: hidden;
   box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
+}
+
+.recommendedLinkOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+}
+
+.recommendedLinkOverlay:focus-visible {
+  outline: 3px solid rgba(29, 60, 115, 0.34);
+  outline-offset: 4px;
 }
 
 .recommendedCard:hover,
@@ -128,6 +141,44 @@
 
 .recommendedCard .media {
   aspect-ratio: 16 / 10;
+}
+
+.recommendedMedia :global(.swiper-wrapper),
+.recommendedMedia :global(.swiper-slide) {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.recommendedMedia :global(.swiper-slide img) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 400ms ease;
+}
+
+.recommendedCard:hover .recommendedMedia :global(.swiper-slide img) {
+  transform: scale(1.05);
+}
+
+.recommendedMedia :global(.swiper-pagination) {
+  bottom: 10px;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.recommendedMedia :global(.swiper-pagination-bullet) {
+  width: 6px;
+  height: 6px;
+  margin: 0 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.74);
+  box-shadow: 0 1px 6px rgba(15, 23, 42, 0.18);
+  opacity: 1;
+}
+
+.recommendedMedia :global(.swiper-pagination-bullet-active) {
+  background: #fff;
 }
 
 .videoCard .media {
@@ -147,7 +198,11 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(15, 23, 42, 0.04) 10%, rgba(15, 23, 42, 0.58) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.04) 10%,
+    rgba(15, 23, 42, 0.58) 100%
+  );
   z-index: 1;
 }
 
@@ -172,35 +227,125 @@
 .recommendedBadge {
   top: 10px;
   left: 10px;
-  z-index: 1;
+  z-index: 4;
   padding: 4px 8px;
   border-radius: 999px;
   background: var(--color-primary);
   color: #fff;
   font-size: 0.68rem;
   font-weight: 700;
+  pointer-events: none;
 }
 
 .favoriteButton {
-  top: 8px;
-  right: 8px;
-  z-index: 1;
+  top: 9px;
+  right: 9px;
+  z-index: 4;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  gap: 5px;
+  min-width: 52px;
+  height: 31px;
+  padding: 0 9px 0 8px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.78);
-  color: #4b5563;
+  background: rgba(255, 255, 255, 0.9);
+  color: #475569;
+  font-size: 0.8rem;
+  font-weight: 850;
+  line-height: 1;
+  box-shadow:
+    0 7px 18px rgba(15, 23, 42, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(12px);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.favoriteButton:hover:not(:disabled) {
+  background: #fff;
+  border-color: rgba(248, 113, 113, 0.34);
+  color: #9f1239;
+  box-shadow:
+    0 10px 22px rgba(127, 29, 29, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+  transform: translateY(-1px);
+}
+
+.favoriteButton:hover:not(:disabled) svg,
+.favoriteButton:hover:not(:disabled) .favoriteButtonCount {
+  color: #e11d48;
+}
+
+.favoriteButton:disabled {
+  cursor: default;
+  opacity: 0.72;
+  transform: none;
 }
 
 .favoriteButton svg {
-  width: 18px;
-  height: 18px;
+  width: 15px;
+  height: 15px;
+  color: #64748b;
+  flex: 0 0 auto;
+}
+
+.favoriteButton svg path {
+  fill: none;
+  stroke: currentColor;
+}
+
+.favoriteButtonCount {
+  min-width: 1ch;
+  color: #25304a;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.favoriteButtonActive {
+  border-color: rgba(248, 113, 113, 0.26);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.96),
+    rgba(255, 241, 242, 0.94)
+  );
+  color: #be123c;
+  box-shadow:
+    0 8px 20px rgba(127, 29, 29, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+.favoriteButtonActive:hover:not(:disabled) {
+  border-color: rgba(248, 113, 113, 0.38);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.98),
+    rgba(255, 228, 230, 0.96)
+  );
+  color: #be123c;
+}
+
+.favoriteButtonActive svg {
+  color: #f04452;
+}
+
+.favoriteButtonActive .favoriteButtonCount {
+  color: #be123c;
+}
+
+.favoriteButtonActive svg path {
+  fill: currentColor;
+  stroke: currentColor;
 }
 
 .recommendedBody {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-rows: auto 64px auto;
   padding: 14px;

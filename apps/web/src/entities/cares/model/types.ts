@@ -8,6 +8,8 @@ export type CarePageListing = {
   grade: string;
   rating: number;
   reviews: number;
+  isLiked: boolean;
+  likeCount: number;
   isPremium: boolean;
   images: string[];
   keywords: string[];
@@ -25,12 +27,17 @@ export type CareRegion = {
   subs: CareRegionSub[];
 };
 
+export type CareViewMode = "grid" | "list";
+
 export type CarePageData = {
   listings: CarePageListing[];
   regions: CareRegion[];
   totalItems: number;
+  paginationTotalPages: number;
   initialThemeCodes: string[];
   initialRegionIds: string[];
+  initialViewMode: CareViewMode;
+  initialPage: number;
   debugResponses: {
     plans: unknown;
     normal: unknown;

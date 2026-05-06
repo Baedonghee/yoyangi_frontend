@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { type MouseEvent, useEffect, useRef, useState } from "react";
 
 import { SystemIcon } from "@/shared/ui/icons/SystemIcon";
+import { CareListingImageSwiper } from "@/widgets/cases/ui/CareListingImageSwiper";
 import styles from "@/features/home/ui/ContentRail.module.css";
 
 export type RailVariant = "recommended" | "video" | "region";
@@ -13,12 +15,15 @@ export type RailCard = {
   href: string;
   title: string;
   imageUrl: string;
+  imageUrls?: string[];
   embedUrl?: string;
   subtitle?: string;
   badge?: string;
   rating?: number;
   consultationLabel?: string;
   meta?: string;
+  isLiked?: boolean;
+  likeCount?: number;
 };
 
 type ContentRailProps = {
@@ -30,24 +35,68 @@ type ContentRailProps = {
 
 const SCROLL_EDGE_THRESHOLD = 8;
 
+type RailLikeState = {
+  isLiked: boolean;
+  likeCount: number;
+  isUpdating: boolean;
+};
+
+type RailLikeStateMap = Record<string, RailLikeState>;
+
 function getYoutubeEmbedUrl(url: string) {
   const match = url.match(/(?:embed\/|v=|youtu\.be\/)([^?&/]+)/);
 
   return match?.[1] ? `https://www.youtube.com/embed/${match[1]}` : "";
 }
 
-export function ContentRail({
-  title,
-  href,
-  items,
-  variant
-}: ContentRailProps) {
+function isExternalHref(href: string) {
+  return /^https?:\/\//.test(href);
+}
+
+function formatLikeCount(count: number) {
+  return Math.max(0, count).toLocaleString("ko-KR");
+}
+
+function getNextLikeCount(count: number, nextLiked: boolean) {
+  return Math.max(0, count + (nextLiked ? 1 : -1));
+}
+
+function makeInitialLikeState(items: RailCard[]): RailLikeStateMap {
+  return items.reduce<RailLikeStateMap>((state, item) => {
+    state[item.id] = {
+      isLiked: Boolean(item.isLiked),
+      likeCount: item.likeCount ?? 0,
+      isUpdating: false,
+    };
+
+    return state;
+  }, {});
+}
+
+function getLikeState(
+  likeState: RailLikeStateMap,
+  item: RailCard,
+): RailLikeState {
+  return (
+    likeState[item.id] ?? {
+      isLiked: Boolean(item.isLiked),
+      likeCount: item.likeCount ?? 0,
+      isUpdating: false,
+    }
+  );
+}
+
+export function ContentRail({ title, href, items, variant }: ContentRailProps) {
   const railRef = useRef<HTMLDivElement>(null);
   const scrollFrameRef = useRef<number | null>(null);
+  const [recommendedLikes, setRecommendedLikes] = useState<RailLikeStateMap>(
+    () => makeInitialLikeState(items),
+  );
   const [scrollButtons, setScrollButtons] = useState({
     left: false,
-    right: false
+    right: false,
   });
+  const isHeaderExternalLink = isExternalHref(href);
 
   function updateScrollButtons() {
     const rail = railRef.current;
@@ -71,14 +120,14 @@ export function ContentRail({
       : false;
     const nextState = {
       left: hasOverflow && hasHiddenLeftItem,
-      right: hasOverflow && hasHiddenRightItem
+      right: hasOverflow && hasHiddenRightItem,
     };
 
     setScrollButtons((currentState) =>
       currentState.left === nextState.left &&
       currentState.right === nextState.right
         ? currentState
-        : nextState
+        : nextState,
     );
   }
 
@@ -102,8 +151,70 @@ export function ContentRail({
 
     rail.scrollBy({
       left: rail.clientWidth * 0.82 * direction,
-      behavior: "smooth"
+      behavior: "smooth",
     });
+  }
+
+  async function toggleRecommendedLike(
+    event: MouseEvent<HTMLButtonElement>,
+    item: RailCard,
+  ) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const currentLikeState = getLikeState(recommendedLikes, item);
+
+    if (currentLikeState.isUpdating) {
+      return;
+    }
+
+    const nextLiked = !currentLikeState.isLiked;
+
+    setRecommendedLikes((current) => ({
+      ...current,
+      [item.id]: {
+        ...getLikeState(current, item),
+        isUpdating: true,
+      },
+    }));
+
+    try {
+      const response = await fetch(
+        `/api/cares/${encodeURIComponent(item.id)}/like`,
+        {
+          method: nextLiked ? "POST" : "DELETE",
+        },
+      );
+      const data = (await response.json().catch(() => null)) as {
+        message?: string;
+      } | null;
+
+      if (!response.ok) {
+        throw new Error(data?.message || "찜 처리에 실패했습니다.");
+      }
+
+      setRecommendedLikes((current) => {
+        const latestLikeState = getLikeState(current, item);
+
+        return {
+          ...current,
+          [item.id]: {
+            isLiked: nextLiked,
+            likeCount: getNextLikeCount(latestLikeState.likeCount, nextLiked),
+            isUpdating: false,
+          },
+        };
+      });
+    } catch (error) {
+      console.error("[home:recommended-like]", error);
+      setRecommendedLikes((current) => ({
+        ...current,
+        [item.id]: {
+          ...getLikeState(current, item),
+          isUpdating: false,
+        },
+      }));
+    }
   }
 
   useEffect(() => {
@@ -138,11 +249,24 @@ export function ContentRail({
     };
   }, [items.length, variant]);
 
+  useEffect(() => {
+    if (variant !== "recommended") {
+      return;
+    }
+
+    setRecommendedLikes(makeInitialLikeState(items));
+  }, [items, variant]);
+
   return (
     <section className={styles.section}>
       <div className={styles.header}>
         <h2>{title}</h2>
-        <Link href={href} className={styles.headerLink}>
+        <Link
+          href={href}
+          className={styles.headerLink}
+          target={isHeaderExternalLink ? "_blank" : undefined}
+          rel={isHeaderExternalLink ? "noopener noreferrer" : undefined}
+        >
           전체보기
           <SystemIcon name="arrow-right" />
         </Link>
@@ -172,18 +296,45 @@ export function ContentRail({
         >
           {items.map((item) => {
             if (variant === "recommended") {
+              const likeState = getLikeState(recommendedLikes, item);
+              const formattedLikeCount = formatLikeCount(likeState.likeCount);
+              const imageSources = item.imageUrls?.length
+                ? item.imageUrls
+                : [item.imageUrl];
+
               return (
-                <Link
+                <article
                   key={item.id}
-                  href={item.href}
                   className={`${styles.card} ${styles.recommendedCard}`}
                 >
-                  <div className={styles.media}>
-                    <img src={item.imageUrl} alt={item.title} className={styles.image} />
-                    <span className={styles.recommendedBadge}>{item.badge}</span>
-                    <span className={styles.favoriteButton}>
-                      <SystemIcon name="heart" />
+                  <Link
+                    href={item.href}
+                    className={styles.recommendedLinkOverlay}
+                    aria-label={`${item.title} 상세보기`}
+                  />
+                  <div className={`${styles.media} ${styles.recommendedMedia}`}>
+                    <CareListingImageSwiper
+                      images={imageSources}
+                      name={item.title}
+                    />
+                    <span className={styles.recommendedBadge}>
+                      {item.badge}
                     </span>
+                    <button
+                      type="button"
+                      className={`${styles.favoriteButton} ${
+                        likeState.isLiked ? styles.favoriteButtonActive : ""
+                      }`}
+                      aria-label={`${likeState.isLiked ? "찜 해제" : "찜하기"}, 좋아요 ${formattedLikeCount}개`}
+                      aria-pressed={likeState.isLiked}
+                      disabled={likeState.isUpdating}
+                      onClick={(event) => toggleRecommendedLike(event, item)}
+                    >
+                      <SystemIcon name="heart" />
+                      <span className={styles.favoriteButtonCount}>
+                        {formattedLikeCount}
+                      </span>
+                    </button>
                   </div>
                   <div className={styles.recommendedBody}>
                     <h3>{item.title}</h3>
@@ -197,13 +348,13 @@ export function ContentRail({
                       </span>
                     </div>
                   </div>
-                </Link>
+                </article>
               );
             }
 
             if (variant === "video") {
               const embedUrl = item.embedUrl || getYoutubeEmbedUrl(item.href);
-              const isExternalLink = /^https?:\/\//.test(item.href);
+              const isExternalLink = isExternalHref(item.href);
 
               return (
                 <article
@@ -221,7 +372,14 @@ export function ContentRail({
                         allowFullScreen
                       />
                     ) : (
-                      <img src={item.imageUrl} alt={item.title} className={styles.image} />
+                      <Image
+                        src={item.imageUrl}
+                        alt={item.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 520px"
+                        unoptimized
+                        className={styles.image}
+                      />
                     )}
                   </div>
                   <div className={styles.videoBody}>
@@ -247,7 +405,14 @@ export function ContentRail({
                 className={`${styles.card} ${styles.regionCard}`}
               >
                 <div className={styles.media}>
-                  <img src={item.imageUrl} alt={item.title} className={styles.image} />
+                  <Image
+                    src={item.imageUrl}
+                    alt={item.title}
+                    fill
+                    sizes="(max-width: 768px) 45vw, 260px"
+                    unoptimized
+                    className={styles.image}
+                  />
                   <div className={styles.regionOverlay}>
                     <h3>{item.title}</h3>
                     <p className={styles.regionSummary}>{item.subtitle}</p>
@@ -272,18 +437,19 @@ export function ContentRail({
   );
 }
 
-export function RailSkeleton({
-  title,
-  href
-}: {
-  title: string;
-  href: string;
-}) {
+export function RailSkeleton({ title, href }: { title: string; href: string }) {
+  const isHeaderExternalLink = isExternalHref(href);
+
   return (
     <section className={styles.section}>
       <div className={styles.header}>
         <h2>{title}</h2>
-        <Link href={href} className={styles.headerLink}>
+        <Link
+          href={href}
+          className={styles.headerLink}
+          target={isHeaderExternalLink ? "_blank" : undefined}
+          rel={isHeaderExternalLink ? "noopener noreferrer" : undefined}
+        >
           전체보기
           <SystemIcon name="arrow-right" />
         </Link>

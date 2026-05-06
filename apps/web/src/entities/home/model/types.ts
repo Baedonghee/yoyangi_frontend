@@ -10,11 +10,25 @@ export type HomeIconName =
   | "calendar"
   | "shield"
   | "search"
+  | "grid"
+  | "list"
+  | "chevron-down"
+  | "chevron-up"
   | "arrow-left"
   | "arrow-right"
   | "play"
   | "star"
   | "chat"
+  | "phone"
+  | "users"
+  | "check"
+  | "x"
+  | "upload"
+  | "tree"
+  | "chef"
+  | "droplets"
+  | "bath"
+  | "wind"
   | "youtube"
   | "blog"
   | "RE"
@@ -81,9 +95,12 @@ export type RecommendedFacility = {
   location: string;
   rating?: number;
   imageUrl: string;
+  imageUrls?: string[];
   href: string;
   badge: string;
   consultationLabel: string;
+  isLiked?: boolean;
+  likeCount?: number;
 };
 
 export type HomeSeo = {
@@ -99,5 +116,6 @@ export type HomePageData = {
   heroBanners: HeroBanner[];
   categories: HomeCategory[];
   tvItems: VideoItem[];
+  careYoutubeItems: VideoItem[];
   regionalFacilities: RegionItem[];
 };

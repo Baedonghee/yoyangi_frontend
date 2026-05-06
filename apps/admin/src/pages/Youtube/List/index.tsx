@@ -41,13 +41,27 @@ interface IFormValues {
   title: string;
 }
 
-const YoutubeList = () => {
+interface IYoutubeListProps {
+  endpoint?: string;
+  label?: string;
+  listPath?: string;
+  addPath?: string;
+  editPath?: string;
+}
+
+const YoutubeList: React.FC<IYoutubeListProps> = ({
+  endpoint,
+  label = '요양이TV',
+  listPath = PATH.YOUTUBE_LIST,
+  addPath = PATH.YOUTUBE_ADD,
+  editPath = PATH.YOUTUBE_EDIT,
+}) => {
   const list = useRecoilValue(youtubeListSelector);
   const page = useRecoilValue(youtubePageSelector);
   const [isOrderOpen, setIsOrderOpen] = useState(false);
 
   const { handleShowAlert, handleClose } = useAlert();
-  const { getYoutubes, editOrderYoutube, deleteYoutube } = useYoutubeActions();
+  const { getYoutubes, editOrderYoutube, deleteYoutube } = useYoutubeActions({ endpoint });
   const { register, setValue, handleSubmit } = useForm<IFormValues>({
     mode: 'onSubmit',
     defaultValues: {
@@ -55,7 +69,7 @@ const YoutubeList = () => {
     },
   });
 
-  const { search } = useLocation();
+  const { pathname, search } = useLocation();
   const query = qs.parse(search, { ignoreQueryPrefix: true });
 
   const navigate = useNavigate();
@@ -67,7 +81,7 @@ const YoutubeList = () => {
       setValue('title', '');
     }
     fetchYoutubes();
-  }, [search]);
+  }, [pathname, search, endpoint]);
 
   const fetchYoutubes = async () => {
     try {
@@ -82,7 +96,7 @@ const YoutubeList = () => {
   };
 
   const onSubmit = handleSubmit(async ({ title }) => {
-    navigate(`${PATH.YOUTUBE_LIST}?title=${title}`);
+    navigate(`${listPath}?title=${title}`);
   });
 
   const handleOrderModalOpen = () => {
@@ -151,18 +165,18 @@ const YoutubeList = () => {
   };
 
   const onReset = () => {
-    navigate(PATH.YOUTUBE_LIST);
+    navigate(listPath);
   };
 
   return (
     <Container>
       {isOrderOpen && (
         <ModalContainer onClose={handleOrderModalClose}>
-          <YoutubeOrder onClose={handleOrderModalClose} handleChangeOrder={handleChangeOrder} />
+          <YoutubeOrder endpoint={endpoint} label={label} onClose={handleOrderModalClose} handleChangeOrder={handleChangeOrder} />
         </ModalContainer>
       )}
-      <PageHeader title="유튜브 목록" />
-      <Form title="유튜브 검색" onSubmit={onSubmit}>
+      <PageHeader title={`${label} 목록`} />
+      <Form title={`${label} 검색`} onSubmit={onSubmit}>
         <Box mt="24px">
           <Typography fontSize={theme.fontSize.text14} color={theme.color.gray900} fontWeight={theme.fontWeight.semiBold}>
             검색
@@ -193,7 +207,7 @@ const YoutubeList = () => {
         <Button color="primary" size="xs" width="80px" mr="12px" onClick={handleOrderModalOpen}>
           순서변경
         </Button>
-        <Link to={PATH.YOUTUBE_ADD}>
+        <Link to={addPath}>
           <Button color="neutral" variant="outline" size="xs" width="80px">
             등록
           </Button>
@@ -201,7 +215,9 @@ const YoutubeList = () => {
       </Box>
       <Box mt="24px">
         <Box display="flex" justifyContent="space-between" alignItems="end">
-          <Typography>유튜브 목록: {page?.totalItems}</Typography>
+          <Typography>
+            {label} 목록: {page?.totalItems}
+          </Typography>
         </Box>
         <Box mt="16px">
           <table className="my-table">
@@ -230,7 +246,7 @@ const YoutubeList = () => {
                     <td>{item.status}</td>
                     <td>
                       <Box d="flex" justifyContent="space-between">
-                        <Link to={PATH.YOUTUBE_EDIT.replace(':id', item.youtubeId)}>
+                        <Link to={editPath.replace(':id', item.youtubeId)}>
                           <Button size="xs" width="90px" mr="8px" color="primary" variant="outline">
                             수정
                           </Button>

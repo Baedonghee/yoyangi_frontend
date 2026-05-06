@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import { theme } from 'styles/theme';
 import { IOption } from 'types/common';
 import { IPremiumQuery } from 'types/premium';
-import { priceList } from 'utils/common';
+import { priceList, validList } from 'utils/common';
 import { isCustomError } from 'utils/error';
 import { calculateSequence } from 'utils/paging';
 import { PATH } from 'utils/path';
@@ -34,10 +34,18 @@ const Container = styled.section`
       &:nth-child(1) {
         width: 70px;
       }
+      &:nth-child(8) {
+        width: 180px;
+      }
       &:last-child {
         width: 200px;
       }
     }
+  }
+  .valid-control {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
   }
 `;
 
@@ -67,10 +75,11 @@ const PremiumList = () => {
   });
 
   const { handleShowAlert, handleClose } = useAlert();
-  const { getPremiums, deletePremium } = usePremiumActions();
+  const { getPremiums, deletePremium, editPremiumValid } = usePremiumActions();
   const { search } = useLocation();
   const navigate = useNavigate();
   const query = qs.parse(search, { ignoreQueryPrefix: true });
+  const [validOptions, setValidOptions] = useState<Record<string, IOption>>({});
 
   useEffect(() => {
     if (query.code) {
@@ -103,6 +112,14 @@ const PremiumList = () => {
     }
     fetchList();
   }, [search]);
+
+  useEffect(() => {
+    const nextOptions = list.reduce<Record<string, IOption>>((acc, item) => {
+      acc[item.residenceId] = validList.find((valid) => valid.value === item.valid) || validList[0];
+      return acc;
+    }, {});
+    setValidOptions(nextOptions);
+  }, [list]);
 
   const [openStartCalendar, setOpenStartCalendar] = useState(false);
   const [openEndCalendar, setOpenEndCalendar] = useState(false);
@@ -200,6 +217,38 @@ const PremiumList = () => {
         }
       },
     });
+  };
+
+  const handleValid = (residenceId: string, option: IOption) => {
+    setValidOptions((prev) => ({
+      ...prev,
+      [residenceId]: option,
+    }));
+  };
+
+  const handleChangeValid = async (residenceId: string) => {
+    const valid = validOptions[residenceId]?.value;
+
+    if (!valid) return;
+
+    try {
+      await editPremiumValid(residenceId, String(valid));
+      handleShowAlert({
+        title: '알림',
+        description: '노출여부가 변경되었습니다.',
+        type: 'success',
+        onClose: () => {
+          handleClose();
+          fetchList();
+        },
+      });
+    } catch (err) {
+      handleShowAlert({
+        title: '알림',
+        description: isCustomError(err),
+        type: 'error',
+      });
+    }
   };
 
   return (
@@ -319,7 +368,7 @@ const PremiumList = () => {
                 <th>등록자</th>
                 <th>등록일자</th>
                 <th>노출기간</th>
-                <th>노출여부</th>
+                <th>노출관리</th>
                 <th>관리</th>
               </tr>
             </thead>
@@ -334,7 +383,20 @@ const PremiumList = () => {
                     <td>{item.creator}</td>
                     <td>{item.createdAt}</td>
                     <td>{`${item.startDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')} ~ ${item.endDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')}`}</td>
-                    <td>{item.valid === 'Y' ? '노출' : '노출 안함'}</td>
+                    <td>
+                      <div className="valid-control">
+                        <Select
+                          width="100px"
+                          list={validList}
+                          size="xs"
+                          selectOption={validOptions[item.residenceId] || validList.find((valid) => valid.value === item.valid) || validList[0]}
+                          onClick={(option) => handleValid(item.residenceId, option)}
+                        />
+                        <Button size="xs" width="60px" color="primary" variant="outline" onClick={() => handleChangeValid(item.residenceId)}>
+                          변경
+                        </Button>
+                      </div>
+                    </td>
                     <td>
                       <Box d="flex" justifyContent="space-between">
                         <Link to={PATH.PREMIUM_EDIT.replace(':id', item.residenceId)}>

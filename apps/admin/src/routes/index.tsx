@@ -42,14 +42,30 @@ const pageRoutes: React.FC = () => (
           <Route path={PATH.PREMIUM_EDIT} element={<PremiumAdd />} />
         </Route>
         <Route element={<GuardRoute code="A4" />}>
-          <Route path={PATH.BANNER_LIST} element={<BannerList />} />
-          <Route path={PATH.BANNER_ADD} element={<BannerAdd />} />
-          <Route path={PATH.BANNER_EDIT} element={<BannerAdd />} />
-        </Route>
-        <Route element={<GuardRoute code="A5" />}>
           <Route path={PATH.YOUTUBE_LIST} element={<YoutubeList />} />
           <Route path={PATH.YOUTUBE_ADD} element={<YoutubeAdd />} />
           <Route path={PATH.YOUTUBE_EDIT} element={<YoutubeAdd />} />
+        </Route>
+        <Route element={<GuardRoute code="A8" />}>
+          <Route
+            path={PATH.CARE_YOUTUBE_LIST}
+            element={
+              <YoutubeList
+                endpoint="/v1/care-youtubes"
+                label="요양여지도"
+                listPath={PATH.CARE_YOUTUBE_LIST}
+                addPath={PATH.CARE_YOUTUBE_ADD}
+                editPath={PATH.CARE_YOUTUBE_EDIT}
+              />
+            }
+          />
+          <Route path={PATH.CARE_YOUTUBE_ADD} element={<YoutubeAdd endpoint="/v1/care-youtubes" label="요양여지도" listPath={PATH.CARE_YOUTUBE_LIST} />} />
+          <Route path={PATH.CARE_YOUTUBE_EDIT} element={<YoutubeAdd endpoint="/v1/care-youtubes" label="요양여지도" listPath={PATH.CARE_YOUTUBE_LIST} />} />
+        </Route>
+        <Route element={<GuardRoute code="A5" />}>
+          <Route path={PATH.BANNER_LIST} element={<BannerList />} />
+          <Route path={PATH.BANNER_ADD} element={<BannerAdd />} />
+          <Route path={PATH.BANNER_EDIT} element={<BannerAdd />} />
         </Route>
         <Route element={<GuardRoute code="A6" />}>
           <Route path={PATH.ADMIN_LIST} element={<AdminList />} />

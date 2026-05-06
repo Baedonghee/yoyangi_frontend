@@ -6,7 +6,7 @@ import type { RecommendedFacility } from "@/entities/home/model/types";
 import {
   ContentRail,
   type RailCard,
-  RailSkeleton
+  RailSkeleton,
 } from "@/features/home/ui/ContentRail";
 
 export function RecommendedFacilitiesSection() {
@@ -19,7 +19,7 @@ export function RecommendedFacilitiesSection() {
       try {
         const response = await fetch("/api/home/recommended", {
           cache: "no-store",
-          signal: controller.signal
+          signal: controller.signal,
         });
 
         if (!response.ok) {
@@ -50,9 +50,12 @@ export function RecommendedFacilitiesSection() {
     title: item.name,
     subtitle: item.location,
     imageUrl: item.imageUrl,
+    imageUrls: item.imageUrls,
     badge: item.badge,
     rating: item.rating,
-    consultationLabel: item.consultationLabel
+    consultationLabel: item.consultationLabel,
+    isLiked: item.isLiked,
+    likeCount: item.likeCount,
   }));
 
   return (
@@ -64,4 +67,3 @@ export function RecommendedFacilitiesSection() {
     />
   );
 }
-

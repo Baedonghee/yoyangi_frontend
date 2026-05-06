@@ -3,12 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { type FormEvent, useEffect, useRef, useState } from "react";
 
 import type { UserPayload } from "@/entities/auth/model/types";
 import {
   logoutCurrentUser,
-  requestCurrentUser
+  requestCurrentUser,
 } from "@/entities/auth/api/kakao-auth";
 import { globalNavigation } from "@/shared/config/site";
 import { SystemIcon } from "@/shared/ui/icons/SystemIcon";
@@ -20,16 +20,24 @@ export function SiteHeader() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const userMenuRef = useRef<HTMLDivElement>(null);
-  const standardNavigation = globalNavigation.filter((item) => !item.emphasized);
-  const emphasizedNavigation = globalNavigation.filter((item) => item.emphasized);
+  const standardNavigation = globalNavigation.filter(
+    (item) => !item.emphasized,
+  );
+  const emphasizedNavigation = globalNavigation.filter(
+    (item) => item.emphasized,
+  );
   const visibleStandardNavigation = user
-    ? standardNavigation.filter((item) => item.href !== "/login" && item.href !== "/signup")
+    ? standardNavigation.filter(
+        (item) => item.href !== "/login" && item.href !== "/signup",
+      )
     : standardNavigation;
   const userName = user?.profile.name || "마이페이지";
   const shouldShowDivider =
     emphasizedNavigation.length > 0 &&
     (visibleStandardNavigation.length > 0 || Boolean(user));
+  const currentSearchQuery = getQueryValue(router.query.q);
 
   useEffect(() => {
     let isMounted = true;
@@ -49,13 +57,17 @@ export function SiteHeader() {
     return () => {
       isMounted = false;
     };
-  }, [router.asPath]);
+  }, []);
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setIsMobileSearchOpen(false);
     setIsUserMenuOpen(false);
   }, [router.asPath]);
+
+  useEffect(() => {
+    setSearchQuery(currentSearchQuery ?? "");
+  }, [currentSearchQuery]);
 
   useEffect(() => {
     function handlePointerDown(event: MouseEvent) {
@@ -75,6 +87,17 @@ export function SiteHeader() {
     await logoutCurrentUser();
     setUser(null);
     setIsUserMenuOpen(false);
+  };
+
+  const handleSearchSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const query = searchQuery.trim();
+
+    void router.push({
+      pathname: "/cares",
+      query: query ? { q: query } : {},
+    });
   };
 
   return (
@@ -113,16 +136,19 @@ export function SiteHeader() {
           </button>
 
           <form
-            action="/search"
+            action="/cares"
             method="get"
             className={`${styles.searchForm} ${isMobileSearchOpen ? styles.searchFormOpen : ""}`}
+            onSubmit={handleSearchSubmit}
           >
             <div className={styles.searchField}>
               <input
                 type="search"
-                name="keyword"
+                name="q"
+                value={searchQuery}
                 placeholder="어떤 요양시설을 찾으시나요?"
                 aria-label="시설 검색"
+                onChange={(event) => setSearchQuery(event.target.value)}
               />
               <button
                 type="submit"
@@ -136,14 +162,20 @@ export function SiteHeader() {
 
           <nav className={styles.navigation}>
             {visibleStandardNavigation.map((item) => (
+              <Link key={item.href} href={item.href} className={styles.navLink}>
+                {item.label}
+              </Link>
+            ))}
+            {emphasizedNavigation.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className={styles.navLink}
+                className={styles.navLinkPrimary}
               >
                 {item.label}
               </Link>
             ))}
+            {shouldShowDivider ? <span className={styles.navDivider} /> : null}
             {user ? (
               <div className={styles.userMenu} ref={userMenuRef}>
                 <button
@@ -169,18 +201,6 @@ export function SiteHeader() {
                 ) : null}
               </div>
             ) : null}
-            {shouldShowDivider ? (
-              <span className={styles.navDivider} />
-            ) : null}
-            {emphasizedNavigation.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={styles.navLinkPrimary}
-              >
-                {item.label}
-              </Link>
-            ))}
           </nav>
         </div>
       </header>
@@ -251,6 +271,10 @@ export function SiteHeader() {
   );
 }
 
+function getQueryValue(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
 function MenuIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -268,7 +292,14 @@ function MenuIcon() {
 function UserIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="12" cy="8" r="3.4" fill="none" stroke="currentColor" strokeWidth="1.9" />
+      <circle
+        cx="12"
+        cy="8"
+        r="3.4"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.9"
+      />
       <path
         d="M5.5 20c1.1-3.8 3.5-5.7 6.5-5.7s5.4 1.9 6.5 5.7"
         fill="none"

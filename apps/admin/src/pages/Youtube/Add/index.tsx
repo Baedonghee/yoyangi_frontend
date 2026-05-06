@@ -24,9 +24,15 @@ interface IFormValues {
   link: string;
 }
 
-const YoutubeAdd = () => {
+interface IYoutubeAddProps {
+  endpoint?: string;
+  label?: string;
+  listPath?: string;
+}
+
+const YoutubeAdd: React.FC<IYoutubeAddProps> = ({ endpoint, label = '요양이TV', listPath = PATH.YOUTUBE_LIST }) => {
   const { id } = useParams<{ id: string }>();
-  const { addYoutube, getYoutube, editYoutube } = useYoutubeActions();
+  const { addYoutube, getYoutube, editYoutube } = useYoutubeActions({ endpoint });
   const { handleShowAlert } = useAlert();
   const navigate = useNavigate();
   const {
@@ -51,7 +57,7 @@ const YoutubeAdd = () => {
         link: '',
       });
     }
-  }, [id]);
+  }, [id, endpoint]);
 
   const fetchDetail = async (youtubeId: string) => {
     try {
@@ -63,10 +69,10 @@ const YoutubeAdd = () => {
     } catch (err) {
       handleShowAlert({
         description: isCustomError(err),
-        title: '유튜브 조회 실패',
+        title: `${label} 조회 실패`,
         type: 'error',
         onClose: () => {
-          navigate(PATH.YOUTUBE_LIST);
+          navigate(listPath);
         },
       });
     }
@@ -80,17 +86,17 @@ const YoutubeAdd = () => {
         await addYoutube({ url: link, title: name });
       }
       handleShowAlert({
-        description: id ? '유튜브가 수정되었습니다.' : '유튜브가 등록되었습니다.',
-        title: id ? '유튜브 수정 성공' : '유튜브 등록 성공',
+        description: id ? `${label}가 수정되었습니다.` : `${label}가 등록되었습니다.`,
+        title: id ? `${label} 수정 성공` : `${label} 등록 성공`,
         type: 'success',
         onClose: () => {
-          navigate(PATH.YOUTUBE_LIST);
+          navigate(listPath);
         },
       });
     } catch (err) {
       handleShowAlert({
         description: isCustomError(err),
-        title: '유튜브 등록 실패',
+        title: id ? `${label} 수정 실패` : `${label} 등록 실패`,
         type: 'error',
       });
     }
@@ -98,9 +104,9 @@ const YoutubeAdd = () => {
 
   return (
     <Container>
-      <PageHeader title={id ? '유튜브 수정' : '유튜브 등록'} />
+      <PageHeader title={id ? `${label} 수정` : `${label} 등록`} />
       <Box mt="24px">
-        <Form title="유튜브 등록" onSubmit={onSubmit}>
+        <Form title={id ? `${label} 수정` : `${label} 등록`} onSubmit={onSubmit}>
           <Box>
             <Box fontSize={theme.fontSize.text14} color={theme.color.gray900} fontWeight={theme.fontWeight.semiBold} display="flex" alignItems="center">
               제목

@@ -1,6 +1,8 @@
 "use client";
 
 import { startTransition, useEffect, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 
 import type { HeroBanner } from "@/entities/home/model/types";
 import styles from "@/features/home/ui/BannerCarousel.module.css";
@@ -9,6 +11,10 @@ import { SystemIcon } from "@/shared/ui/icons/SystemIcon";
 type BannerCarouselProps = {
   items: HeroBanner[];
 };
+
+function isExternalHref(href: string) {
+  return /^https?:\/\//i.test(href);
+}
 
 export function BannerCarousel({ items }: BannerCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -50,25 +56,55 @@ export function BannerCarousel({ items }: BannerCarouselProps) {
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
         {items.map((item, index) => {
-          return (
-            <article key={item.id} className={styles.slide}>
-              <img
+          const slideContent = (
+            <>
+              <Image
                 src={item.imageUrl}
                 alt={item.title}
+                fill
+                priority={index === 0}
+                sizes="100vw"
+                unoptimized
                 className={`${styles.image} ${
                   item.mobileImageUrl ? styles.desktopImageWithMobile : ""
                 }`}
-                loading={index === 0 ? "eager" : "lazy"}
               />
               {item.mobileImageUrl ? (
-                <img
+                <Image
                   src={item.mobileImageUrl}
                   alt={item.title}
+                  fill
+                  priority={index === 0}
+                  sizes="100vw"
+                  unoptimized
                   className={`${styles.image} ${styles.mobileImage}`}
-                  loading={index === 0 ? "eager" : "lazy"}
                 />
               ) : null}
               <div className={styles.overlay} />
+            </>
+          );
+
+          return (
+            <article key={item.id} className={styles.slide}>
+              {isExternalHref(item.href) ? (
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={styles.slideLink}
+                  aria-label={`${item.title} 새 창으로 보기`}
+                >
+                  {slideContent}
+                </a>
+              ) : (
+                <Link
+                  href={item.href}
+                  className={styles.slideLink}
+                  aria-label={`${item.title} 상세보기`}
+                >
+                  {slideContent}
+                </Link>
+              )}
             </article>
           );
         })}

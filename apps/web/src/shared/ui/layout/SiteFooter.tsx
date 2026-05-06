@@ -2,9 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { footerLinkGroups, siteConfig } from "@/shared/config/site";
+import { formatKoreanPhoneNumber } from "@/shared/lib/format-phone";
 import styles from "@/shared/ui/layout/SiteChrome.module.css";
 
 export function SiteFooter() {
+  const customerPhone = formatKoreanPhoneNumber(siteConfig.customerPhone);
+
   return (
     <footer className={styles.footer}>
       <div className={styles.footerInner}>
@@ -44,9 +47,7 @@ export function SiteFooter() {
 
           <div className={styles.footerGroup}>
             <strong>대표전화</strong>
-            <span className={styles.footerPhone}>
-              {siteConfig.customerPhone}
-            </span>
+            <span className={styles.footerPhone}>{customerPhone}</span>
             <span>
               {siteConfig.customerHours}
               <br />
@@ -57,9 +58,10 @@ export function SiteFooter() {
 
         <div className={styles.footerBottom}>
           <p className={styles.footerCopyright}>
-            요양이 대표이사 : 정웅택 / 소재지: 경기도 양주시 옥정로6길 18, 404호 2호실
+            요양이 대표이사 : 정웅택 / 소재지: 경기도 양주시 옥정로6길 18, 404호
+            2호실
             <br />
-            사업자등록: 678-86-03255 / 고객센터: 1577-5776
+            사업자등록: 678-86-03255 / 고객센터: {customerPhone}
             <br />
             Copyright © YOYANGEE CO., LTD. All Rights Reserved.
           </p>

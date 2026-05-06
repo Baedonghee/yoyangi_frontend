@@ -70,6 +70,13 @@
   --color-primary-strong: #16315f;
   --color-primary-soft: rgba(29, 60, 115, 0.12);
   --color-primary-softer: rgba(29, 60, 115, 0.08);
+  --page-shell-background:
+    radial-gradient(
+      circle at 10% 0%,
+      rgba(29, 60, 115, 0.09),
+      transparent 26%
+    ),
+    linear-gradient(180deg, #f8fafc 0%, #ffffff 52%);
 }
 
 *,
@@ -154,5 +161,5 @@ table {
 }
 
 ::selection {
-  background: rgba(249, 115, 22, 0.18);
+  background: rgba(29, 60, 115, 0.18);
 }

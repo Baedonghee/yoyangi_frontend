@@ -4,6 +4,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { createKakaoAuthorizeUrl } from "@/entities/auth/api/kakao-auth";
+import {
+  createAuthSwitchHref,
+  getContinuePathFromQuery,
+} from "@/shared/lib/auth-redirect";
 import styles from "@/widgets/auth/ui/AuthPage.module.css";
 
 type AuthPageMode = "login" | "signup";
@@ -49,13 +53,11 @@ export function AuthPage({ mode }: { mode: AuthPageMode }) {
   const router = useRouter();
   const copy = authCopy[mode];
   const pageTitle = `${copy.switchLabel === "로그인" ? "회원가입" : "로그인"} | 요양이`;
-  const continueUrl = getQueryValue(router.query.continue_url);
-  const switchHref = continueUrl
-    ? `${copy.switchHref}?continue_url=${encodeURIComponent(continueUrl)}`
-    : copy.switchHref;
+  const continuePath = getContinuePathFromQuery(router.query);
+  const switchHref = createAuthSwitchHref(copy.switchHref, continuePath);
 
   const handleKakaoClick = () => {
-    window.location.href = createKakaoAuthorizeUrl(mode, continueUrl);
+    window.location.href = createKakaoAuthorizeUrl(mode, continuePath);
   };
 
   return (
@@ -103,10 +105,6 @@ export function AuthPage({ mode }: { mode: AuthPageMode }) {
       </main>
     </>
   );
-}
-
-function getQueryValue(value: string | string[] | undefined) {
-  return Array.isArray(value) ? value[0] : value;
 }
 
 function KakaoIcon() {

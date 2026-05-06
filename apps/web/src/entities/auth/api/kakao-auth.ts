@@ -5,6 +5,7 @@ import type {
   SocialAuthForm,
   UserPayload
 } from "@/entities/auth/model/types";
+import { normalizeContinuePath } from "@/shared/lib/auth-redirect";
 
 type KakaoTokenResponse = {
   access_token?: string;
@@ -32,14 +33,15 @@ export function createKakaoRedirectUri(mode: AuthMode) {
 
 export function createKakaoAuthorizeUrl(mode: AuthMode, continueUrl?: string) {
   const url = new URL(KAKAO_AUTH_URL);
+  const continuePath = normalizeContinuePath(continueUrl);
 
   url.searchParams.set("client_id", KAKAO_REST_API_KEY);
   url.searchParams.set("redirect_uri", createKakaoRedirectUri(mode));
   url.searchParams.set("response_type", "code");
   url.searchParams.set("lang", "ko");
 
-  if (continueUrl) {
-    url.searchParams.set("state", continueUrl);
+  if (continuePath) {
+    url.searchParams.set("state", continuePath);
   }
 
   return url.toString();

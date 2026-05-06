@@ -1,6 +1,8 @@
 import type { AppProps } from "next/app";
 import type { NextPage } from "next";
-import type { ReactElement, ReactNode } from "react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 import "@/app/globals.css";
 import { FloatingQuickActions } from "@/shared/ui/layout/FloatingQuickActions";
@@ -9,14 +11,14 @@ import { SiteHeader } from "@/shared/ui/layout/SiteHeader";
 
 type NextPageWithLayout<P = Record<string, never>> = NextPage<P> & {
   noChrome?: boolean;
-  getLayout?: (page: ReactElement) => ReactElement;
+  getLayout?: (page: React.ReactElement) => React.ReactNode;
 };
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
-function DefaultChrome({ children }: { children: ReactNode }) {
+function DefaultChrome({ children }: { children: React.ReactNode }) {
   return (
     <>
       <SiteHeader />
@@ -29,8 +31,8 @@ function DefaultChrome({ children }: { children: ReactNode }) {
 
 export default function App({
   Component,
-  pageProps
-}: AppPropsWithLayout): ReactElement {
+  pageProps,
+}: AppPropsWithLayout): React.ReactNode {
   const page = <Component {...pageProps} />;
 
   if (Component.getLayout) {

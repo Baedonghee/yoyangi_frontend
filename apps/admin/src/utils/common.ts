@@ -106,14 +106,15 @@ export const sortRegionList = [
   '제주',
 ];
 
-export const authoritySortList = ['회원관리', '요양원관리', '프리미엄관리', '유튜브관리', '배너관리', '리뷰관리', '관리자관리'];
+export const authoritySortList = ['회원관리', '요양원관리', '프리미엄관리', '요양이TV 관리', '요양여지도 관리', '배너관리', '리뷰관리', '관리자관리'];
 
 export const authorityList = [
   { value: 'A1', name: '회원관리' },
   { value: 'A2', name: '요양원관리' },
   { value: 'A3', name: '프리미엄관리' },
-  { value: 'A4', name: '유튜브관리' },
+  { value: 'A4', name: '요양이TV 관리' },
   { value: 'A5', name: '배너관리' },
   { value: 'A6', name: '관리자관리' },
   { value: 'A7', name: '리뷰관리' },
+  { value: 'A8', name: '요양여지도 관리' },
 ];

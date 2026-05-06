@@ -2,8 +2,6 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 
-import Box from 'components/UI/Box';
-
 import Header from './Header';
 import Sidebar from './Sidebar';
 
@@ -14,25 +12,36 @@ const LayoutWrapper = styled.section`
   right: 0;
   bottom: 0;
   display: flex;
-  overflow-y: auto;
+  overflow: hidden;
   main {
     display: flex;
     flex-direction: column;
     position: relative;
-    overflow-y: auto;
+    overflow: hidden;
+    min-height: 0;
+    height: 100%;
     width: 100%;
   }
 `;
 
+const Content = styled.div`
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overflow-anchor: none;
+  padding: 32px;
+`;
+
 const Layout: React.FC = () => {
   return (
-    <LayoutWrapper>
+    <LayoutWrapper data-scroll-container="admin-layout">
       <Sidebar />
-      <main>
+      <main data-scroll-container="admin-main">
         <Header />
-        <Box p="32px" overflowX="hidden" minHeight="calc(100vh - 64px)">
+        <Content data-scroll-container="admin-content">
           <Outlet />
-        </Box>
+        </Content>
       </main>
     </LayoutWrapper>
   );
